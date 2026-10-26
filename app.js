@@ -1,13 +1,16 @@
 /**
  * ROMANTIC BIRTHDAY STORYBOOK
- * Interactive Engine: Dynamic Content Sync, Audio Player, 3D Page Flip & Animations
+ * Interactive Engine: Dynamic Content Sync, Audio Player, 3D Page Flip for Desktop & Mobile
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  let currentSpread = 0;
+  let isMobile = window.innerWidth <= 860;
+  let currentSpread = 0;       // Desktop: 0 to 4
   const totalSpreads = 5;
-  let storyContent = null;
+  let currentMobilePage = 0;   // Mobile: 0 to 8
+  const totalMobilePages = 9;
   let isAnimatingFlip = false;
+  let storyContent = null;
 
   // DOM Elements
   const spreadSections = document.querySelectorAll('.spread-section');
@@ -19,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const zoneTurnLeft = document.getElementById('zoneTurnLeft');
   const zoneTurnRight = document.getElementById('zoneTurnRight');
   const flipperLeaf = document.getElementById('flipperLeaf');
+  const mobileCards = document.querySelectorAll('[data-mobile-page]');
 
   // Interactive Birthday Cake
   const blowBtn = document.getElementById('blowBtn');
@@ -149,9 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================
-  // 2. STORYBOOK SPREAD & REALISTIC 3D PAGE FLIP
+  // 2. DESKTOP DUAL-PAGE SPREAD LOGIC
   // =========================================================
-  function goToSpread(index, direction = 'next') {
+  function goToDesktopSpread(index, direction = 'next') {
     if (index < 0 || index >= totalSpreads || isAnimatingFlip) return;
     
     const previousIndex = currentSpread;
@@ -160,8 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Trigger 3D flipper leaf animation
     if (flipperLeaf && previousIndex !== currentSpread) {
-      flipperLeaf.className = 'page-flipper-leaf'; // reset
-      void flipperLeaf.offsetWidth; // trigger reflow
+      flipperLeaf.className = 'page-flipper-leaf';
+      void flipperLeaf.offsetWidth;
       if (direction === 'next') {
         flipperLeaf.classList.add('flipping-next');
       } else {
@@ -187,16 +191,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Update bottom nav buttons
     prevSpreadBtn.disabled = currentSpread === 0;
     nextSpreadBtn.disabled = currentSpread === totalSpreads - 1;
 
-    // Update dots
     dotBtns.forEach((dot, idx) => {
       dot.classList.toggle('active', idx === currentSpread);
     });
 
-    // Update side zones
     if (zoneTurnLeft) zoneTurnLeft.style.display = currentSpread === 0 ? 'none' : 'flex';
     if (zoneTurnRight) zoneTurnRight.style.display = currentSpread >= totalSpreads - 1 ? 'none' : 'flex';
 
@@ -212,57 +213,179 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function nextSpread() {
-    if (currentSpread < totalSpreads - 1) {
-      goToSpread(currentSpread + 1, 'next');
+  // =========================================================
+  // 3. SPECIAL MOBILE 3D SINGLE-PAGE FLIP ENGINE
+  // =========================================================
+  function goToMobilePage(targetIdx, direction = 'next') {
+    if (targetIdx < 0 || targetIdx >= totalMobilePages || isAnimatingFlip) return;
+
+    const prevIdx = currentMobilePage;
+    currentMobilePage = targetIdx;
+    isAnimatingFlip = true;
+
+    // Automatically trigger romantic music when opening book from cover (Page 0)
+    if (prevIdx === 0 && targetIdx > 0 && !isMusicPlaying) {
+      startMusic();
+    }
+
+    playPageTurnSound();
+
+    const prevCard = document.querySelector(`[data-mobile-page="${prevIdx}"]`);
+    const nextCard = document.querySelector(`[data-mobile-page="${targetIdx}"]`);
+
+    const prevSpread = prevCard ? prevCard.closest('.spread-section') : null;
+    const nextSpread = nextCard ? nextCard.closest('.spread-section') : null;
+
+    // Keep both spreads visible during transition so flip animation is visible
+    if (prevSpread) prevSpread.classList.add('active');
+    if (nextSpread) nextSpread.classList.add('active');
+
+    // 3D Flip Animation Classes
+    if (prevCard && nextCard && prevIdx !== targetIdx) {
+      // Clear previous classes
+      mobileCards.forEach(c => {
+        c.classList.remove('flip-out-next', 'flip-in-next', 'flip-out-prev', 'flip-in-prev');
+      });
+
+      if (direction === 'next') {
+        prevCard.classList.add('flip-out-next');
+        nextCard.classList.add('mobile-active', 'flip-in-next');
+      } else {
+        prevCard.classList.add('flip-out-prev');
+        nextCard.classList.add('mobile-active', 'flip-in-prev');
+      }
+
+      // Reset scroll on target page
+      const content = nextCard.querySelector('.page-content');
+      if (content) content.scrollTop = 0;
+
+      setTimeout(() => {
+        mobileCards.forEach((c, idx) => {
+          c.classList.remove('flip-out-next', 'flip-in-next', 'flip-out-prev', 'flip-in-prev');
+          c.classList.toggle('mobile-active', idx === currentMobilePage);
+        });
+
+        // Clean up inactive spreads
+        spreadSections.forEach(sec => {
+          if (!sec.contains(nextCard)) {
+            sec.classList.remove('active');
+          }
+        });
+
+        isAnimatingFlip = false;
+      }, 650);
+    } else {
+      mobileCards.forEach((c, idx) => {
+        c.classList.toggle('mobile-active', idx === currentMobilePage);
+      });
+      spreadSections.forEach(sec => {
+        if (!sec.contains(nextCard)) {
+          sec.classList.remove('active');
+        }
+      });
+      isAnimatingFlip = false;
+    }
+
+    // Controls update
+    prevSpreadBtn.disabled = currentMobilePage === 0;
+    nextSpreadBtn.disabled = currentMobilePage === totalMobilePages - 1;
+
+    // Dot mapping (9 pages map proportionally to 5 dots)
+    const activeDotIdx = Math.min(4, Math.floor(currentMobilePage / 2));
+    dotBtns.forEach((dot, idx) => {
+      dot.classList.toggle('active', idx === activeDotIdx);
+    });
+
+    if (currentMobilePage === totalMobilePages - 1) {
+      triggerConfettiBurst();
     }
   }
 
-  function prevSpread() {
-    if (currentSpread > 0) {
-      goToSpread(currentSpread - 1, 'prev');
+  // Unified Page Turning
+  function turnNext() {
+    if (isMobile) {
+      if (currentMobilePage === 0 && !isMusicPlaying) {
+        startMusic();
+      }
+      if (currentMobilePage < totalMobilePages - 1) {
+        goToMobilePage(currentMobilePage + 1, 'next');
+      }
+    } else {
+      if (currentSpread === 0 && !isMusicPlaying) {
+        startMusic();
+      }
+      if (currentSpread < totalSpreads - 1) {
+        goToDesktopSpread(currentSpread + 1, 'next');
+      }
     }
   }
 
-  nextSpreadBtn.addEventListener('click', nextSpread);
-  prevSpreadBtn.addEventListener('click', prevSpread);
+  function turnPrev() {
+    if (isMobile) {
+      if (currentMobilePage > 0) {
+        goToMobilePage(currentMobilePage - 1, 'prev');
+      }
+    } else {
+      if (currentSpread > 0) {
+        goToDesktopSpread(currentSpread - 1, 'prev');
+      }
+    }
+  }
 
-  if (zoneTurnLeft) zoneTurnLeft.addEventListener('click', prevSpread);
-  if (zoneTurnRight) zoneTurnRight.addEventListener('click', nextSpread);
+  // Button Listeners
+  nextSpreadBtn.addEventListener('click', turnNext);
+  prevSpreadBtn.addEventListener('click', turnPrev);
+
+  if (zoneTurnLeft) zoneTurnLeft.addEventListener('click', turnPrev);
+  if (zoneTurnRight) zoneTurnRight.addEventListener('click', turnNext);
 
   if (openStoryBtn) {
     openStoryBtn.addEventListener('click', () => {
-      goToSpread(1, 'next');
       if (!isMusicPlaying) {
         startMusic();
+      }
+      if (isMobile) {
+        goToMobilePage(1, 'next');
+      } else {
+        goToDesktopSpread(1, 'next');
       }
     });
   }
 
   if (readAgainBtn) {
     readAgainBtn.addEventListener('click', () => {
-      goToSpread(0, 'prev');
+      if (isMobile) {
+        goToMobilePage(0, 'prev');
+      } else {
+        goToDesktopSpread(0, 'prev');
+      }
     });
   }
 
   dotBtns.forEach(dot => {
     dot.addEventListener('click', () => {
       const targetIdx = parseInt(dot.dataset.spreadIdx, 10);
-      const dir = targetIdx > currentSpread ? 'next' : 'prev';
-      goToSpread(targetIdx, dir);
+      if (isMobile) {
+        const targetMobileIdx = targetIdx * 2;
+        const dir = targetMobileIdx > currentMobilePage ? 'next' : 'prev';
+        goToMobilePage(Math.min(targetMobileIdx, totalMobilePages - 1), dir);
+      } else {
+        const dir = targetIdx > currentSpread ? 'next' : 'prev';
+        goToDesktopSpread(targetIdx, dir);
+      }
     });
   });
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight' || e.key === ' ') {
-      nextSpread();
+      turnNext();
     } else if (e.key === 'ArrowLeft') {
-      prevSpread();
+      turnPrev();
     }
   });
 
-  // Touch Swipe for Mobile HP
+  // Touch Swipe for Mobile HP with High Responsiveness
   let touchStartX = 0;
   let touchStartY = 0;
   const stage = document.getElementById('storybookWrapper');
@@ -278,19 +401,48 @@ document.addEventListener('DOMContentLoaded', () => {
     const diffX = touchEndX - touchStartX;
     const diffY = touchEndY - touchStartY;
 
-    if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+    // Minimum swipe threshold 35px
+    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
       if (diffX < 0) {
-        nextSpread();
+        // Direct touch gesture on mobile: trigger music autoplay on cover swipe
+        if (isMobile && currentMobilePage === 0 && !isMusicPlaying) {
+          startMusic();
+        } else if (!isMobile && currentSpread === 0 && !isMusicPlaying) {
+          startMusic();
+        }
+        turnNext();
       } else {
-        prevSpread();
+        turnPrev();
       }
     }
   }, { passive: true });
 
-  goToSpread(0);
+  // Handle Resize between Mobile and Desktop
+  window.addEventListener('resize', () => {
+    const newIsMobile = window.innerWidth <= 860;
+    if (newIsMobile !== isMobile) {
+      isMobile = newIsMobile;
+      if (isMobile) {
+        // Sync spread to mobile page
+        currentMobilePage = currentSpread * 2;
+        goToMobilePage(Math.min(currentMobilePage, totalMobilePages - 1));
+      } else {
+        // Sync mobile page to spread
+        currentSpread = Math.min(4, Math.floor(currentMobilePage / 2));
+        goToDesktopSpread(currentSpread);
+      }
+    }
+  });
+
+  // Init initial state
+  if (isMobile) {
+    goToMobilePage(0);
+  } else {
+    goToDesktopSpread(0);
+  }
 
   // =========================================================
-  // 3. INTERACTIVE BIRTHDAY CAKE & TIUP LILIN
+  // 4. INTERACTIVE BIRTHDAY CAKE & TIUP LILIN
   // =========================================================
   function handleBlowCandle() {
     if (isCandleBlown) {
@@ -341,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================
-  // 4. WAX SEAL & LOVE LETTER
+  // 5. WAX SEAL & LOVE LETTER
   // =========================================================
   function toggleEnvelope() {
     isEnvelopeOpen = !isEnvelopeOpen;
@@ -364,7 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (vintageEnvelope) vintageEnvelope.addEventListener('click', toggleEnvelope);
 
   // =========================================================
-  // 5. SURPRISE GIFT BOX
+  // 6. SURPRISE GIFT BOX
   // =========================================================
   if (giftBox) {
     giftBox.addEventListener('click', () => {
@@ -398,7 +550,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================
-  // 6. AMBIENT PETALS & CANVAS
+  // 7. AMBIENT PETALS & CANVAS
   // =========================================================
   const canvas = document.getElementById('ambientCanvas');
   const ctx = canvas.getContext('2d');
@@ -543,7 +695,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================
-  // 7. AUDIO ENGINE (JAZ - BERSAMAMU & SOUND EFFECTS)
+  // 8. AUDIO ENGINE (JAZ - BERSAMAMU & SOUND EFFECTS)
   // =========================================================
   function initAudioContext() {
     if (!audioCtx) {

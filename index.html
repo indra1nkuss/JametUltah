@@ -54,7 +54,7 @@
 
     <div class="storybook-wrapper" id="storybookWrapper">
 
-      <!-- Left / Right Click Turn Zones for Natural Book Page Turning -->
+      <!-- Left / Right Click Turn Zones for Natural Book Page Turning (Desktop) -->
       <div class="turn-zone turn-zone-left" id="zoneTurnLeft" title="Klik untuk halaman sebelumnya">
         <span class="zone-hint-arrow">‹</span>
       </div>
@@ -62,7 +62,7 @@
         <span class="zone-hint-arrow">›</span>
       </div>
 
-      <!-- Realistic 3D Page Turn Flipper Leaf -->
+      <!-- Realistic 3D Page Turn Flipper Leaf (Desktop) -->
       <div class="page-flipper-leaf" id="flipperLeaf">
         <div class="leaf-front"></div>
         <div class="leaf-back"></div>
@@ -70,7 +70,7 @@
 
       <!-- ================= SPREAD 0: COVER ================= -->
       <section class="spread-section active" data-spread="0" id="spread-0">
-        <div class="cover-card">
+        <div class="cover-card mobile-book-card mobile-active" data-mobile-page="0">
           <div class="cover-inner-border">
             <div class="cover-badge" id="coverBadge">✦ A JOURNEY OF LOVE ✦</div>
             <p class="cover-edition" id="coverEdition">Special Birthday Edition</p>
@@ -91,7 +91,7 @@
               <span>Buka Buku Cerita Kita</span>
               <span class="btn-arrow">➔</span>
             </button>
-            <p class="open-story-sub">Sentuh tombol untuk membuka halaman pertama 📖</p>
+            <p class="open-story-sub" id="openStorySub">Geser ke kiri atau sentuh tombol untuk membuka 📖</p>
           </div>
         </div>
       </section>
@@ -99,8 +99,8 @@
       <!-- ================= SPREAD 1: HALAMAN 1 & 2 ================= -->
       <section class="spread-section" data-spread="1" id="spread-1">
         <div class="book-spread">
-          <!-- Page Left: Prologue -->
-          <div class="book-page page-left">
+          <!-- Page Left: Prologue (Mobile Page 1) -->
+          <div class="book-page page-left mobile-book-card" data-mobile-page="1">
             <div class="page-content">
               <span class="page-tag">PROLOGUE</span>
               <h2 class="script-title" id="prologueTitle">Awal Dari Segalanya</h2>
@@ -120,8 +120,8 @@
             </div>
           </div>
 
-          <!-- Page Right: Bab 1 (Kenangan Hangat) -->
-          <div class="book-page page-right">
+          <!-- Page Right: Bab 1 Kenangan Hangat (Mobile Page 2) -->
+          <div class="book-page page-right mobile-book-card" data-mobile-page="2">
             <div class="page-content">
               <span class="page-tag">BAB 1</span>
               <h2 class="serif-title" id="chapter1Title">Momen Hangat Bersamamu</h2>
@@ -150,8 +150,8 @@
       <!-- ================= SPREAD 2: HALAMAN 3 & 4 ================= -->
       <section class="spread-section" data-spread="2" id="spread-2">
         <div class="book-spread">
-          <!-- Page Left: Bab 2 (Alasan Mencintaimu) -->
-          <div class="book-page page-left">
+          <!-- Page Left: Bab 2 Alasan Cinta (Mobile Page 3) -->
+          <div class="book-page page-left mobile-book-card" data-mobile-page="3">
             <div class="page-content">
               <span class="page-tag">BAB 2</span>
               <h2 class="serif-title" id="chapter2Title">Alasan Hatiku Memilihmu</h2>
@@ -184,8 +184,8 @@
             </div>
           </div>
 
-          <!-- Page Right: Bab 3 (Golden Hour) -->
-          <div class="book-page page-right">
+          <!-- Page Right: Bab 3 Golden Hour (Mobile Page 4) -->
+          <div class="book-page page-right mobile-book-card" data-mobile-page="4">
             <div class="page-content">
               <span class="page-tag">BAB 3</span>
               <h2 class="serif-title" id="chapter3Title">Langkah Bersama Menuju Senja</h2>
@@ -214,8 +214,8 @@
       <!-- ================= SPREAD 3: HALAMAN 5 & 6 ================= -->
       <section class="spread-section" data-spread="3" id="spread-3">
         <div class="book-spread">
-          <!-- Page Left: Momen Tiup Lilin -->
-          <div class="book-page page-left cake-page">
+          <!-- Page Left: Momen Tiup Lilin (Mobile Page 5) -->
+          <div class="book-page page-left cake-page mobile-book-card" data-mobile-page="5">
             <div class="page-content">
               <span class="page-tag">INTERACTIVE</span>
               <h2 class="script-title" id="cakeTitle">Buat Sebuah Permintaan ✨</h2>
@@ -275,8 +275,8 @@
             </div>
           </div>
 
-          <!-- Page Right: Surat Spesial Cinta -->
-          <div class="book-page page-right letter-page">
+          <!-- Page Right: Surat Spesial Cinta (Mobile Page 6) -->
+          <div class="book-page page-right letter-page mobile-book-card" data-mobile-page="6">
             <div class="page-content">
               <span class="page-tag">SURAT SPESIAL</span>
               <h2 class="serif-title" id="letterTitle">Sepucuk Surat Dari Hati</h2>
@@ -316,8 +316,8 @@
       <!-- ================= SPREAD 4: HALAMAN 7 & BACK COVER ================= -->
       <section class="spread-section" data-spread="4" id="spread-4">
         <div class="book-spread">
-          <!-- Page Left: Kado Kejutan -->
-          <div class="book-page page-left">
+          <!-- Page Left: Kado Kejutan (Mobile Page 7) -->
+          <div class="book-page page-left mobile-book-card" data-mobile-page="7">
             <div class="page-content">
               <span class="page-tag">SURPRISE</span>
               <h2 class="script-title" id="giftTitle">Kado Spesial Untukmu</h2>
@@ -347,8 +347,8 @@
             </div>
           </div>
 
-          <!-- Page Right: Back Cover -->
-          <div class="book-page page-right back-cover-page">
+          <!-- Page Right: Back Cover (Mobile Page 8) -->
+          <div class="book-page page-right back-cover-page mobile-book-card" data-mobile-page="8">
             <div class="cover-inner-border back-cover-content">
               <div class="back-emblem">✦ ∞ ✦</div>
               <h2 class="script-title back-title" id="endingTitle">Cinta yang Tak Pernah Usai</h2>
@@ -375,7 +375,7 @@
 
     <!-- Mobile Swipe Guide Badge -->
     <div class="mobile-guide-badge">
-      <span>📖 Geser layar atau klik tombol untuk membalik halaman</span>
+      <span>📖 Geser layar ke kiri untuk membalik halaman</span>
     </div>
 
     <!-- Floating Navigation Bar -->

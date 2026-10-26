@@ -188,7 +188,7 @@ html, body {
 }
 
 /* =========================================================
-   3D REALISTIC PAGE FLIPPER LEAF ANIMATION
+   3D REALISTIC PAGE FLIPPER LEAF ANIMATION (DESKTOP)
    ========================================================= */
 .page-flipper-leaf {
   position: absolute;
@@ -277,7 +277,7 @@ html, body {
   }
 }
 
-/* Side Turn Zones */
+/* Side Turn Zones (Desktop) */
 .turn-zone {
   position: absolute;
   top: 0;
@@ -319,7 +319,7 @@ html, body {
   transform: translateX(4px);
 }
 
-/* Spread Sections Visibility */
+/* Spread Sections (Desktop Dual-Page View) */
 .spread-section {
   position: absolute;
   top: 50%;
@@ -342,7 +342,6 @@ html, body {
   transform: translate(-50%, -50%) scale(1);
 }
 
-/* Spread In Animations */
 .spread-section.turn-in-next {
   animation: spreadInFromRight 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
@@ -362,7 +361,7 @@ html, body {
 }
 
 /* =========================================================
-   SPREAD 0: COVER CARD (CLOSED BOOK)
+   COVER CARD (LUXURY LEATHER & VELVET WINE)
    ========================================================= */
 .cover-card {
   width: 440px;
@@ -1458,121 +1457,649 @@ html, body {
 }
 
 /* =========================================================
-   RESPONSIVE DESIGN (SMARTPHONES HP & TABLETS)
+   SPECIAL MOBILE STORYBOOK ENGINE (MAX-WIDTH: 860px)
+   Authentic Single Pocket-Book with 3D Page Turn & Full Cover
    ========================================================= */
 @media screen and (max-width: 860px) {
   .top-header {
-    padding: 10px 14px;
+    padding: 8px 14px;
   }
   
   .header-title {
-    font-size: 0.92rem;
+    font-size: 0.88rem;
     letter-spacing: 1px;
   }
 
   .nav-btn {
-    padding: 6px 12px;
-    font-size: 0.78rem;
+    padding: 5px 10px;
+    font-size: 0.75rem;
+    gap: 5px;
   }
 
   .main-wrapper {
-    padding: 60px 12px 75px;
-  }
-
-  .page-flipper-leaf {
-    display: none; /* Mobile uses slide-and-peel transition */
+    padding: 52px 10px 65px;
+    height: 100vh;
+    min-height: -webkit-fill-available;
+    justify-content: center;
+    overflow: hidden;
   }
 
   .turn-zone {
     display: none;
   }
 
-  .storybook-wrapper {
-    width: 100%;
-    min-height: 520px;
-  }
-
-  /* Book Spread transforms to clean vertical card on mobile */
-  .book-spread {
-    flex-direction: column;
-    width: 100%;
-    max-width: 440px;
-    min-height: auto;
-    max-height: 68vh;
-    overflow-y: auto;
-  }
-
-  .book-spread::before {
+  .page-flipper-leaf {
     display: none;
   }
 
-  .book-page {
-    border-radius: 0 !important;
-    border: none;
-    border-bottom: 2px dashed rgba(212, 175, 55, 0.3);
+  /* Stage Container on Mobile */
+  .storybook-wrapper {
+    width: 100%;
+    max-width: 380px;
+    height: calc(100dvh - 130px);
+    max-height: 560px;
+    min-height: 480px;
+    perspective: 1600px;
+    position: relative;
   }
 
-  .page-content {
-    padding: 24px 18px 20px;
-    overflow-y: visible;
+  /* Mobile Spread Section Container */
+  .spread-section {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    transform: none !important;
+    display: block !important;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
   }
 
-  .cover-name {
-    font-size: 2.3rem;
+  .spread-section.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+  }
+
+  .book-spread {
+    position: relative !important;
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .book-spread::before {
+    display: none !important;
+  }
+
+  /* The Mobile Page Cards */
+  .mobile-book-card {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: var(--parchment-bg);
+    background-image: 
+      radial-gradient(ellipse at 85% 15%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+      linear-gradient(to right, rgba(0,0,0,0.06), transparent 15%, transparent 85%, rgba(0,0,0,0.03));
+    border-radius: 14px !important;
+    border: 3px solid #280829 !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), inset 14px 0 22px -8px rgba(0, 0, 0, 0.28) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    transform-origin: left center !important;
+    transform-style: preserve-3d !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+    transition: opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    z-index: 1;
+  }
+
+  .mobile-book-card.mobile-active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+    z-index: 10 !important;
+    transform: rotateY(0deg) scale(1) !important;
+  }
+
+  /* =====================================================
+     MOBILE COVER CARD: RICH VELVET LEATHER & GOLD EMBOSSING
+     ===================================================== */
+  .cover-card.mobile-book-card {
+    background: radial-gradient(circle at 35% 30%, #4e1241 0%, var(--cover-wine) 65%, var(--cover-wine-dark) 100%) !important;
+    border: 4px solid #1a0416 !important;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6) !important;
+    color: #fff !important;
+    padding: 10px !important;
+  }
+
+  .cover-card .cover-inner-border {
+    width: 100% !important;
+    height: 100% !important;
+    border: 2px solid rgba(212, 175, 55, 0.7) !important;
+    outline: 1px dashed rgba(212, 175, 55, 0.4) !important;
+    outline-offset: -7px !important;
+    border-radius: 8px !important;
+    padding: 16px 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    text-align: center !important;
+    background: radial-gradient(circle at center, rgba(255, 215, 0, 0.04) 0%, transparent 75%) !important;
+  }
+
+  .cover-badge {
+    font-size: 0.68rem !important;
+    letter-spacing: 2px !important;
+  }
+
+  .cover-edition {
+    font-size: 0.8rem !important;
+    margin-top: 1px !important;
   }
 
   .cover-image-container {
-    width: 170px;
-    height: 170px;
+    width: 145px !important;
+    height: 145px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    border: 3.5px solid var(--gold-primary) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 25px rgba(212, 175, 55, 0.35) !important;
+    margin: 8px 0 !important;
+  }
+
+  .cover-tagline {
+    font-size: 0.95rem !important;
+    color: var(--gold-glow) !important;
+    letter-spacing: 1.5px !important;
+    margin-bottom: 2px !important;
+  }
+
+  .cover-name {
+    font-size: 2.3rem !important;
+    line-height: 1.1 !important;
+    color: #fff !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6), 0 0 25px rgba(248, 165, 194, 0.6) !important;
+    margin: 2px 0 6px !important;
+  }
+
+  .cover-subtext {
+    font-size: 0.85rem !important;
+    color: #f1dfd1 !important;
+    max-width: 290px !important;
+    line-height: 1.35 !important;
+  }
+
+  .open-story-btn {
+    background: linear-gradient(135deg, #d4af37 0%, #f9d976 50%, #e5c07b 100%) !important;
+    color: #2b0b30 !important;
+    padding: 10px 24px !important;
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    border-radius: 30px !important;
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.45) !important;
+    margin-top: 8px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .open-story-sub {
+    font-size: 0.68rem !important;
+    margin-top: 4px !important;
+  }
+
+  /* 3D Page Turn Animation on Mobile: Next */
+  .mobile-book-card.flip-out-next {
+    animation: mobilePageFlipOutNext 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    z-index: 20;
+    pointer-events: none;
+  }
+
+  .mobile-book-card.flip-in-next {
+    animation: mobilePageFlipInNext 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    z-index: 15;
+    pointer-events: auto;
+  }
+
+  @keyframes mobilePageFlipOutNext {
+    0% {
+      transform: rotateY(0deg) skewY(0deg);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      opacity: 1;
+    }
+    45% {
+      transform: rotateY(-85deg) skewY(-2deg) scale(0.96);
+      box-shadow: -25px 15px 45px rgba(0, 0, 0, 0.4);
+      opacity: 0.9;
+    }
+    100% {
+      transform: rotateY(-180deg) skewY(0deg);
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  @keyframes mobilePageFlipInNext {
+    0% {
+      transform: scale(0.95);
+      opacity: 0.4;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  /* 3D Page Turn Animation on Mobile: Prev */
+  .mobile-book-card.flip-out-prev {
+    animation: mobilePageFlipOutPrev 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    z-index: 10;
+  }
+
+  .mobile-book-card.flip-in-prev {
+    animation: mobilePageFlipInPrev 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    z-index: 20;
+    pointer-events: auto;
+  }
+
+  @keyframes mobilePageFlipInPrev {
+    0% {
+      transform: rotateY(-180deg) skewY(0deg);
+      opacity: 0;
+    }
+    55% {
+      transform: rotateY(-85deg) skewY(2deg) scale(0.96);
+      opacity: 0.9;
+    }
+    100% {
+      transform: rotateY(0deg) skewY(0deg);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  @keyframes mobilePageFlipOutPrev {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0; visibility: hidden; }
+  }
+
+  /* Mobile Content Sizing */
+  .page-content {
+    padding: 16px 16px 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+
+  .page-content::-webkit-scrollbar {
+    display: none;
+  }
+
+  .page-tag {
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
   }
 
   .script-title {
-    font-size: 2.2rem;
+    font-size: 2rem;
+    line-height: 1.05;
   }
 
   .serif-title {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
+    line-height: 1.15;
   }
 
+  .ornament-divider {
+    font-size: 0.75rem;
+    margin: 4px 0 8px;
+    letter-spacing: 3px;
+  }
+
+  .body-text {
+    font-size: 0.88rem;
+    line-height: 1.45;
+    margin-bottom: 8px;
+  }
+
+  .body-sub {
+    font-size: 0.78rem;
+    margin-bottom: 8px;
+  }
+
+  .quote-box {
+    padding: 8px 12px;
+    margin: 8px 0;
+  }
+
+  .quote-content {
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .page-num {
+    padding-top: 6px;
+    font-size: 0.75rem;
+    margin-top: auto;
+  }
+
+  /* Mobile Polaroids */
   .polaroid-box {
-    width: 90%;
+    width: 78%;
+    max-width: 230px;
+    margin: 4px auto 8px;
+    padding: 6px 6px 10px;
   }
 
   .polaroid-photo {
-    height: 160px;
+    height: 130px;
   }
 
+  .polaroid-pin {
+    top: -10px;
+    font-size: 1.1rem;
+  }
+
+  .tape-strip {
+    top: -6px;
+    width: 65px;
+    height: 16px;
+  }
+
+  .label-handwritten {
+    font-size: 1.05rem;
+  }
+
+  .label-date {
+    font-size: 0.58rem;
+  }
+
+  /* Mobile Cards Grid */
+  .cards-grid {
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+
+  .mini-card {
+    padding: 7px 5px;
+    border-radius: 8px;
+  }
+
+  .mini-card-icon {
+    font-size: 1.1rem;
+    margin-bottom: 1px;
+  }
+
+  .mini-card-title {
+    font-size: 0.8rem;
+  }
+
+  .mini-card-text {
+    font-size: 0.65rem;
+    line-height: 1.25;
+  }
+
+  /* Mobile Birthday Cake */
+  .birthday-cake {
+    width: 150px;
+    height: 125px;
+    margin: 2px 0 6px;
+  }
+
+  .candles-wrap {
+    top: 10px;
+    gap: 12px;
+  }
+
+  .stick {
+    width: 7px;
+    height: 28px;
+  }
+
+  .candle-center .stick {
+    height: 35px;
+    width: 9px;
+  }
+
+  .flame {
+    width: 10px;
+    height: 15px;
+  }
+
+  .cake-tier-top {
+    width: 90px;
+    height: 38px;
+  }
+
+  .cake-topping {
+    font-size: 0.8rem;
+    top: -10px;
+  }
+
+  .cake-tier-base {
+    width: 130px;
+    height: 44px;
+    margin-top: -6px;
+  }
+
+  .plate-base {
+    width: 155px;
+    height: 10px;
+  }
+
+  .cake-controls {
+    margin-top: 8px;
+    gap: 4px;
+  }
+
+  .action-pill-btn {
+    padding: 7px 18px;
+    font-size: 0.82rem;
+  }
+
+  .cake-instruction {
+    font-size: 0.74rem;
+    max-width: 250px;
+  }
+
+  .wish-box {
+    margin-top: 6px;
+    padding: 8px 12px;
+  }
+
+  .wish-title {
+    font-size: 0.72rem;
+  }
+
+  .wish-msg {
+    font-size: 0.85rem;
+  }
+
+  /* Mobile Envelope & Letter */
   .vintage-envelope {
-    width: 250px;
-    height: 160px;
+    width: 220px;
+    height: 140px;
   }
 
   .envelope-flap {
-    border-left-width: 125px;
-    border-right-width: 125px;
-    border-top-width: 85px;
+    border-left-width: 110px;
+    border-right-width: 110px;
+    border-top-width: 75px;
+  }
+
+  .wax-seal {
+    width: 36px;
+    height: 36px;
+    top: 50px;
+    font-size: 0.55rem;
+  }
+
+  .letter-sheet {
+    left: 8px;
+    width: calc(100% - 16px);
+    height: 125px;
+    padding: 8px 10px;
+  }
+
+  .letter-top {
+    font-size: 0.65rem;
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+  }
+
+  .letter-message {
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  .letter-sign {
+    font-size: 1.15rem;
+    margin-top: 4px;
+  }
+
+  .sign-name {
+    font-size: 1rem;
   }
 
   .vintage-envelope.opened .letter-sheet {
-    transform: translateY(-70px);
-    height: 220px;
+    transform: translateY(-55px);
+    height: 185px;
   }
 
-  .mobile-guide-badge {
-    display: block;
+  .envelope-help {
+    font-size: 0.74rem;
+    margin-top: 10px;
   }
 
+  /* Mobile Gift Box */
+  .gift-area {
+    margin: 8px 0 6px;
+  }
+
+  .gift-box-3d {
+    width: 75px;
+    height: 75px;
+  }
+
+  .gift-body-box {
+    height: 65px;
+  }
+
+  .gift-lid-box {
+    width: 82px;
+    height: 20px;
+    left: -4px;
+  }
+
+  .gift-ribbon-bow {
+    font-size: 1.4rem;
+    top: -15px;
+  }
+
+  .gift-prompt {
+    font-size: 0.76rem;
+    margin-top: 6px;
+  }
+
+  .gift-message-box {
+    margin-top: 8px;
+    padding: 8px 12px;
+  }
+
+  .gift-msg-title {
+    font-size: 0.75rem;
+  }
+
+  .gift-msg-text {
+    font-size: 0.85rem;
+  }
+
+  /* Mobile Back Cover */
+  .back-cover-page.mobile-book-card {
+    background: radial-gradient(circle at 35% 30%, #4e1241 0%, var(--cover-wine) 65%, var(--cover-wine-dark) 100%) !important;
+    border: 4px solid #1a0416 !important;
+    color: #fff !important;
+  }
+
+  .back-cover-content {
+    padding: 16px 14px;
+  }
+
+  .back-emblem {
+    font-size: 1rem;
+  }
+
+  .back-title {
+    font-size: 2.2rem;
+  }
+
+  .back-quote {
+    font-size: 0.88rem;
+    line-height: 1.35;
+  }
+
+  .back-actions {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .back-action-btn {
+    padding: 8px 14px;
+    font-size: 0.78rem;
+  }
+
+  /* Bottom Controls on Mobile */
   .bottom-nav-bar {
     bottom: 12px;
-    padding: 8px 16px;
-    gap: 12px;
+    padding: 6px 14px;
+    gap: 10px;
   }
-  
+
+  .nav-arrow-btn {
+    padding: 4px 10px;
+  }
+
   .nav-arrow-btn .btn-text {
     display: none;
   }
 
   .arrow-sym {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
+  }
+
+  .spread-dots {
+    gap: 6px;
+  }
+
+  .dot-btn {
+    width: 8px;
+    height: 8px;
+  }
+
+  .mobile-guide-badge {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.72rem;
+    padding: 3px 10px;
   }
 }
