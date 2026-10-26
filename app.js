@@ -63,9 +63,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (res.ok) {
         storyContent = await res.json();
         renderContent(storyContent);
+        return;
       }
-    } catch (e) {
-      console.warn('Using default content');
+    } catch (e) {}
+
+    // Fallback directly to content.json (for static CDN / Vercel)
+    try {
+      const resStatic = await fetch('content.json');
+      if (resStatic.ok) {
+        storyContent = await resStatic.json();
+        renderContent(storyContent);
+      }
+    } catch (err) {
+      console.warn('Using inline default content');
     }
   }
 
