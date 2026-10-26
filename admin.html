@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Admin Panel | Kustomisasi Storybook Ulang Tahun</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0f0412;
+      --card-bg: #1e0923;
+      --card-border: rgba(212, 175, 55, 0.3);
+      --gold: #d4af37;
+      --gold-light: #f7e7a7;
+      --rose: #e84393;
+      --text: #f5e8f4;
+      --text-muted: #a68ba2;
+      --radius: 12px;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 10%, #290b2e 0%, #110314 60%, #08010a 100%);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 90px;
+    }
+
+    /* Admin Header */
+    .admin-header {
+      background: rgba(18, 5, 22, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 28px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      font-size: 1.6rem;
+    }
+
+    .brand-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      letter-spacing: 0.5px;
+    }
+
+    .brand-sub {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .header-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-view-web {
+      background: linear-gradient(135deg, var(--gold), #f3e5ab);
+      color: #2b0b30;
+      font-weight: 700;
+      padding: 9px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-view-web:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group {
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: #e3d2e1;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"], input[type="url"], textarea, select {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--gold);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .hint {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    /* Photo Upload Box */
+    .photo-upload-wrap {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px dashed rgba(212, 175, 55, 0.4);
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 6px;
+    }
+
+    .photo-preview {
+      width: 90px;
+      height: 90px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid var(--gold);
+      background: #333;
+    }
+
+    .photo-info {
+      flex: 1;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .btn-upload {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid var(--gold);
+      color: #fff;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-upload:hover {
+      background: var(--gold);
+      color: #2b0b30;
+    }
+
+    /* Reasons Mini Grid */
+    .reasons-admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .reason-item-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    /* Sticky Bottom Action Bar */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(18, 5, 22, 0.92);
+      backdrop-filter: blur(14px);
+      border-top: 1px solid var(--card-border);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.6);
+    }
+
+    .status-text {
+      font-size: 0.85rem;
+      color: var(--gold-light);
+    }
+
+    .btn-save-all {
+      background: linear-gradient(135deg, #e84393 0%, #ff7675 100%);
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 12px 28px;
+      border-radius: 30px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(232, 67, 147, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-save-all:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(232, 67, 147, 0.6);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #27ae60;
+      color: #fff;
+      padding: 12px 22px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      transform: translateY(-50px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .form-grid, .reasons-admin-grid {
+        grid-template-columns: 1fr;
+      }
+      .admin-header {
+        padding: 12px 16px;
+      }
+      .brand-title {
+        font-size: 1.1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin Header -->
+  <header class="admin-header">
+    <div class="brand">
+      <span class="brand-icon">⚙️</span>
+      <div>
+        <h1 class="brand-title">Storybook CMS Dashboard</h1>
+        <p class="brand-sub">Kustomisasi Teks, Narasi, Foto, dan Musik</p>
+      </div>
+    </div>
+    <div class="header-links">
+      <a href="/" target="_blank" class="btn-view-web">
+        <span>👁️ Lihat Web Storybook</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ================= 1. PENGATURAN MUSIK ================= -->
+    <div class="section-card">
+      <div class="section-head">
+        <h2 class="section-title">🎵 Musik Latar Romantis</h2>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Pilih Lagu yang Tersedia:</label>
+          <select id="selectMusic">
+            <option value="assets/music/Jaz - Bersamamu (Official Lyric Video).mp3">Jaz - Bersamamu (Default)</option>
+          </select>
+          <small class="hint">Lagu yang ada di folder assets/music/</small>
+        </div>
+        <div class="form-group">
+          <label>Unggah Lagu Sendiri (.mp3):</label>
+          <input type="file" id="uploadMusicFile" accept="audio/*">
+          <small class="hint">Unggah file lagu baru langsung ke folder assets/music/</small>
+        </div>
+        <div class="full-width">
+          <audio id="adminAudioPreview" controls style="width: 100%; margin-top: 8px;"></audio>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 2. HALAMAN SAMPUL (COVER) ================= -->
+    <div class="section-card">
+      <div class="section-head">
+        <h2 class="section-title">📖 Halaman Sampul (Cover)</h2>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Tagline / Ucapan Pembuka:</label>
+          <input type="text" id="coverTagline">
+        </div>
+        <div class="form-group">
+          <label>Nama Pasangan / Penerima:</label>
+          <input type="text" id="coverRecipientName">
+        </div>
+        <div class="form-group full-width">
+          <label>Kutipan Romantis Sampul:</label>
+          <textarea id="coverSubtext" rows="2"></textarea>
+        </div>
+        <div class="form-group full-width">
+          <label>Foto Sampul (Cover Image):</label>
+          <div class="photo-upload-wrap">
+            <img src="assets/cover.jpg" id="previewCoverImg" class="photo-preview" alt="Cover Preview">
+            <div class="photo-info">
+              <input type="file" id="fileCover" class="file-input" accept="image/*">
+              <button type="button" class="btn-upload" onclick="document.getElementById('fileCover').click()">
+                📷 Ganti Foto Sampul
+              </button>
+              <small class="hint" id="statusCoverImg">File: assets/cover.jpg</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 3. BAB 1: PROLOGUE & POLAROID 1 ================= -->
+    <div class="section-card">
+      <div class="section-head">
+        <h2 class="section-title">✨ Bab 1: Momen Hangat (Halaman 1 & 2)</h2>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Judul Prologue:</label>
+          <input type="text" id="prologueTitle">
+        </div>
+        <div class="form-group">
+          <label>Judul Bab 1:</label>
+          <input type="text" id="chapter1Title">
+        </div>
+        <div class="form-group full-width">
+          <label>Paragraf Pembuka:</label>
+          <textarea id="prologueP1" rows="3"></textarea>
+        </div>
+        <div class="form-group full-width">
+          <label>Kutipan Indah (Quote Box):</label>
+          <textarea id="prologueQuote" rows="2"></textarea>
+        </div>
+        <div class="form-group full-width">
+          <label>Foto Polaroid 1:</label>
+          <div class="photo-upload-wrap">
+            <img src="assets/memory1.jpg" id="previewMemory1Img" class="photo-preview" alt="Memory 1 Preview">
+            <div class="photo-info">
+              <input type="file" id="fileMemory1" class="file-input" accept="image/*">
+              <button type="button" class="btn-upload" onclick="document.getElementById('fileMemory1').click()">
+                📷 Ganti Foto Polaroid 1
+              </button>
+              <small class="hint" id="statusMemory1Img">File: assets/memory1.jpg</small>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Caption Foto Polaroid 1:</label>
+          <input type="text" id="memory1Caption">
+        </div>
+        <div class="form-group">
+          <label>Tanggal / Label Polaroid 1:</label>
+          <input type="text" id="memory1Date">
+        </div>
+        <div class="form-group full-width">
+          <label>Catatan Kisah Bab 1:</label>
+          <textarea id="memory1Text" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 4. BAB 2: ALASAN MENCINTAIMU ================= -->
+    <div class="section-card">
+      <div class="section-head">
+        <h2 class="section-title">💖 Bab 2: 4 Alasan Mencintaimu (Halaman 3)</h2>
+      </div>
+      <div class="form-group">
+        <label>Judul Bab 2:</label>
+        <input type="text" id="chapter2Title">
+      </div>
+      <div class="reasons-admin-grid">
+        <div class="reason-item-box">
+          <label>Alasan 1:</label>
+          <input type="text" id="reasonTitle0" style="margin-bottom: 6px;">
+          <textarea id="reasonDesc0" rows="2"></textarea>
+        </div>
+        <div class="reason-item-box">
+          <label>Alasan 2:</label>
+          <input type="text" id="reasonTitle1" style="margin-bottom: 6px;">
+          <textarea id="reasonDesc1" rows="2"></textarea>
+        </div>
+        <div class="reason-item-box">
+          <label>Alasan 3:</label>
+          <input type="text" id="reasonTitle2" style="margin-bottom: 6px;">
+          <textarea id="reasonDesc2" rows="2"></textarea>
+        </div>
+        <div class="reason-item-box">
+          <label>Alasan 4:</label>
+          <input type="text" id="reasonTitle3" style="margin-bottom: 6px;">
+          <textarea id="reasonDesc3" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 5. BAB 3: POLAROID 2 (LANGKAH SENJA) ================= -->
+    <div class="section-card">
+      <div class="section-head">
+        <h2 class="section-title">🌅 Bab 3: Langkah Bersama (Halaman 4)</h2>
+      </div>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Judul Bab 3:</label>
+          <input type="text" id="chapter3Title">
+        </div>
+        <div class="form-group full-width">
+          <label>Foto Polaroid 2:</label>
+          <div class="photo-upload-wrap">
+            <img src="assets/memory2.jpg" id="previewMemory2Img" class="photo-preview" alt="Memory 2 Preview">
+            <div class="photo-info">
+              <input type="file" id="fileMemory2" class="file-input" accept="image/*">
+              <button type="button" class="btn-upload" onclick="document.getElementById('fileMemory2').click()">
+                📷 Ganti Foto Polaroid 2
+              </button>
+              <small class="hint" id="statusMemory2Img">File: assets/memory2.jpg</small>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Caption Foto Polaroid 2:</label>
+          <input type="text" id="memory2Caption">
+        </div>
+        <div class="form-group">
+          <label>Tanggal / Label Polaroid 2:</label>
+          <input type="text" id="memory2Date">
+        </div>
+        <div class="form-group full-width">
+          <label>Teks Romantis Senja:</label>
+          <textarea id="memory2Text" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 6. BAB 4: TIUP LILIN & SURAT CINTA ================= -->
+    <div class="section-card">
+      <div class="section-head">
+        <h2 class="section-title">🎂 Bab 4: Momen Tiup Lilin & Surat Cinta (Halaman 5 & 6)</h2>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Judul Halaman Kue:</label>
+          <input type="text" id="cakeTitle">
+        </div>
+        <div class="form-group">
+          <label>Pesan Doa Setelah Lilin Ditiup:</label>
+          <input type="text" id="wishMessage">
+        </div>
+        <div class="form-group">
+          <label>Tanggal Surat:</label>
+          <input type="text" id="letterDate">
+        </div>
+        <div class="form-group">
+          <label>Kepada (Penerima):</label>
+          <input type="text" id="letterRecipient">
+        </div>
+        <div class="form-group full-width">
+          <label>Isi Surat Cinta Spesial:</label>
+          <textarea id="letterContent" rows="4"></textarea>
+        </div>
+        <div class="form-group full-width">
+          <label>Tanda Tangan Pengirim (Nama Anda):</label>
+          <input type="text" id="letterSender">
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= 7. BAB 5: KADO & PENUTUP ================= -->
+    <div class="section-card">
+      <div class="section-head">
+        <h2 class="section-title">🎁 Bab 5: Kado Kejutan & Penutup (Halaman 7 & Sampul Belakang)</h2>
+      </div>
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label>Pesan Rahasia Saat Kado Dibuka:</label>
+          <textarea id="giftSecretMessage" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Judul Sampul Belakang:</label>
+          <input type="text" id="endingTitle">
+        </div>
+        <div class="form-group full-width">
+          <label>Kutipan Cinta Abadi Penutup:</label>
+          <textarea id="endingQuote" rows="2"></textarea>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Sticky Bottom Save Bar -->
+  <div class="sticky-bar">
+    <div class="status-text" id="saveStatus">Semua perubahan siap disimpan.</div>
+    <button type="button" class="btn-save-all" id="btnSaveAll">
+      <span>💾 Simpan Semua Perubahan</span>
+    </button>
+  </div>
+
+  <div class="toast" id="toast">✅ Perubahan berhasil disimpan!</div>
+
+  <script>
+    let currentData = {};
+
+    // Fetch and populate content
+    async function loadContent() {
+      try {
+        const res = await fetch('/api/content');
+        currentData = await res.json();
+
+        // Music
+        if (currentData.music) {
+          const select = document.getElementById('selectMusic');
+          select.value = currentData.music.src;
+          document.getElementById('adminAudioPreview').src = currentData.music.src;
+        }
+
+        // Cover
+        document.getElementById('coverTagline').value = currentData.cover.tagline || '';
+        document.getElementById('coverRecipientName').value = currentData.cover.recipientName || '';
+        document.getElementById('coverSubtext').value = currentData.cover.subtext || '';
+        if (currentData.cover.photo) {
+          document.getElementById('previewCoverImg').src = currentData.cover.photo;
+        }
+
+        // Spread 1
+        document.getElementById('prologueTitle').value = currentData.spread1.prologueTitle || '';
+        document.getElementById('chapter1Title').value = currentData.spread1.chapter1Title || '';
+        document.getElementById('prologueP1').value = currentData.spread1.prologueP1 || '';
+        document.getElementById('prologueQuote').value = currentData.spread1.prologueQuote || '';
+        if (currentData.spread1.memory1Photo) {
+          document.getElementById('previewMemory1Img').src = currentData.spread1.memory1Photo;
+        }
+        document.getElementById('memory1Caption').value = currentData.spread1.memory1Caption || '';
+        document.getElementById('memory1Date').value = currentData.spread1.memory1Date || '';
+        document.getElementById('memory1Text').value = currentData.spread1.memory1Text || '';
+
+        // Spread 2
+        document.getElementById('chapter2Title').value = currentData.spread2.chapter2Title || '';
+        if (currentData.spread2.reasons) {
+          currentData.spread2.reasons.forEach((r, idx) => {
+            if (document.getElementById(`reasonTitle${idx}`)) {
+              document.getElementById(`reasonTitle${idx}`).value = r.title || '';
+              document.getElementById(`reasonDesc${idx}`).value = r.desc || '';
+            }
+          });
+        }
+
+        // Spread 3
+        document.getElementById('chapter3Title').value = currentData.spread2.chapter3Title || '';
+        if (currentData.spread2.memory2Photo) {
+          document.getElementById('previewMemory2Img').src = currentData.spread2.memory2Photo;
+        }
+        document.getElementById('memory2Caption').value = currentData.spread2.memory2Caption || '';
+        document.getElementById('memory2Date').value = currentData.spread2.memory2Date || '';
+        document.getElementById('memory2Text').value = currentData.spread2.memory2Text || '';
+
+        // Spread 4 (Cake & Letter)
+        document.getElementById('cakeTitle').value = currentData.spread3.cakeTitle || '';
+        document.getElementById('wishMessage').value = currentData.spread3.wishMessage || '';
+        document.getElementById('letterDate').value = currentData.spread3.letterDate || '';
+        document.getElementById('letterRecipient').value = currentData.spread3.letterRecipient || '';
+        document.getElementById('letterContent').value = currentData.spread3.letterContent || '';
+        document.getElementById('letterSender').value = currentData.spread3.letterSender || '';
+
+        // Spread 5 (Gift & Ending)
+        document.getElementById('giftSecretMessage').value = currentData.spread4.giftSecretMessage || '';
+        document.getElementById('endingTitle').value = currentData.spread4.endingTitle || '';
+        document.getElementById('endingQuote').value = currentData.spread4.endingQuote || '';
+
+        loadMusicList();
+      } catch (err) {
+        console.error('Error loading content:', err);
+      }
+    }
+
+    // Load available music in assets/music
+    async function loadMusicList() {
+      try {
+        const res = await fetch('/api/music-list');
+        const list = await res.json();
+        const select = document.getElementById('selectMusic');
+        select.innerHTML = '';
+        list.forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m.path;
+          opt.textContent = m.name;
+          select.appendChild(opt);
+        });
+        if (currentData.music && currentData.music.src) {
+          select.value = currentData.music.src;
+        }
+      } catch (e) {}
+    }
+
+    document.getElementById('selectMusic').addEventListener('change', (e) => {
+      document.getElementById('adminAudioPreview').src = e.target.value;
+    });
+
+    // Upload Handler
+    async function uploadFile(fileInput, targetKey, previewEl, statusEl) {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      statusEl.textContent = 'Mengunggah...';
+
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        if (data.success) {
+          previewEl.src = data.filePath + '?t=' + Date.now();
+          statusEl.textContent = 'Tersimpan: ' + data.filePath;
+          showToast('Foto berhasil diunggah!');
+
+          // Update currentData state
+          if (targetKey === 'cover') currentData.cover.photo = data.filePath;
+          if (targetKey === 'memory1') currentData.spread1.memory1Photo = data.filePath;
+          if (targetKey === 'memory2') currentData.spread2.memory2Photo = data.filePath;
+        } else {
+          statusEl.textContent = 'Gagal: ' + data.error;
+        }
+      } catch (err) {
+        statusEl.textContent = 'Error: ' + err.message;
+      }
+    }
+
+    // File input listeners
+    document.getElementById('fileCover').addEventListener('change', function() {
+      uploadFile(this, 'cover', document.getElementById('previewCoverImg'), document.getElementById('statusCoverImg'));
+    });
+    document.getElementById('fileMemory1').addEventListener('change', function() {
+      uploadFile(this, 'memory1', document.getElementById('previewMemory1Img'), document.getElementById('statusMemory1Img'));
+    });
+    document.getElementById('fileMemory2').addEventListener('change', function() {
+      uploadFile(this, 'memory2', document.getElementById('previewMemory2Img'), document.getElementById('statusMemory2Img'));
+    });
+
+    // Music Upload Listener
+    document.getElementById('uploadMusicFile').addEventListener('change', async function() {
+      const file = this.files[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append('file', file);
+      try {
+        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+        const data = await res.json();
+        if (data.success) {
+          showToast('Musik berhasil diunggah!');
+          await loadMusicList();
+          document.getElementById('selectMusic').value = data.filePath;
+          document.getElementById('adminAudioPreview').src = data.filePath;
+        }
+      } catch (e) {
+        alert('Gagal mengunggah musik: ' + e.message);
+      }
+    });
+
+    // Save All Data
+    document.getElementById('btnSaveAll').addEventListener('click', async () => {
+      // Gather inputs
+      currentData.music = {
+        src: document.getElementById('selectMusic').value,
+        title: document.getElementById('selectMusic').selectedOptions[0]?.textContent || 'Lagu Pilihan'
+      };
+
+      currentData.cover.tagline = document.getElementById('coverTagline').value;
+      currentData.cover.recipientName = document.getElementById('coverRecipientName').value;
+      currentData.cover.subtext = document.getElementById('coverSubtext').value;
+
+      currentData.spread1.prologueTitle = document.getElementById('prologueTitle').value;
+      currentData.spread1.chapter1Title = document.getElementById('chapter1Title').value;
+      currentData.spread1.prologueP1 = document.getElementById('prologueP1').value;
+      currentData.spread1.prologueQuote = document.getElementById('prologueQuote').value;
+      currentData.spread1.memory1Caption = document.getElementById('memory1Caption').value;
+      currentData.spread1.memory1Date = document.getElementById('memory1Date').value;
+      currentData.spread1.memory1Text = document.getElementById('memory1Text').value;
+
+      currentData.spread2.chapter2Title = document.getElementById('chapter2Title').value;
+      for (let i = 0; i < 4; i++) {
+        if (currentData.spread2.reasons[i]) {
+          currentData.spread2.reasons[i].title = document.getElementById(`reasonTitle${i}`).value;
+          currentData.spread2.reasons[i].desc = document.getElementById(`reasonDesc${i}`).value;
+        }
+      }
+
+      currentData.spread2.chapter3Title = document.getElementById('chapter3Title').value;
+      currentData.spread2.memory2Caption = document.getElementById('memory2Caption').value;
+      currentData.spread2.memory2Date = document.getElementById('memory2Date').value;
+      currentData.spread2.memory2Text = document.getElementById('memory2Text').value;
+
+      currentData.spread3.cakeTitle = document.getElementById('cakeTitle').value;
+      currentData.spread3.wishMessage = document.getElementById('wishMessage').value;
+      currentData.spread3.letterDate = document.getElementById('letterDate').value;
+      currentData.spread3.letterRecipient = document.getElementById('letterRecipient').value;
+      currentData.spread3.letterContent = document.getElementById('letterContent').value;
+      currentData.spread3.letterSender = document.getElementById('letterSender').value;
+
+      currentData.spread4.giftSecretMessage = document.getElementById('giftSecretMessage').value;
+      currentData.spread4.endingTitle = document.getElementById('endingTitle').value;
+      currentData.spread4.endingQuote = document.getElementById('endingQuote').value;
+
+      try {
+        const res = await fetch('/api/content', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(currentData)
+        });
+        const result = await res.json();
+        if (result.success) {
+          showToast('✅ Semua perubahan berhasil disimpan!');
+        } else {
+          alert('Gagal menyimpan: ' + result.error);
+        }
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    });
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    loadContent();
+  </script>
+</body>
+</html>

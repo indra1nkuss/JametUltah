@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Selamat Ulang Tahun, Cintaku ✨ | Our Storybook</title>
+  <meta name="description" content="Buku cerita cinta interaktif dan ucapan ulang tahun romantis dengan animasi menarik.">
+  <meta name="theme-color" content="#1a071f">
+
+  <!-- Google Fonts: Luxurious Serif, Romantic Script & Clean UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sacramento&display=swap" rel="stylesheet">
+
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Ambient Rose Petals & Starry Particles Canvas -->
+  <canvas id="ambientCanvas" class="ambient-canvas"></canvas>
+
+  <!-- Top Floating Header Bar -->
+  <header class="top-header">
+    <div class="header-left">
+      <span class="heart-pulse">💖</span>
+      <span class="header-title">Our Romantic Storybook</span>
+    </div>
+
+    <div class="header-right">
+      <!-- Music Button with Soundwave -->
+      <button id="musicToggleBtn" class="nav-btn music-btn" aria-label="Putar Musik Romantis" title="Putar Musik: Jaz - Bersamamu">
+        <span id="musicIcon" class="btn-icon">🎵</span>
+        <span class="soundwave">
+          <span class="wave-bar"></span>
+          <span class="wave-bar"></span>
+          <span class="wave-bar"></span>
+          <span class="wave-bar"></span>
+        </span>
+        <span id="musicLabel" class="btn-text">Musik: Putar</span>
+      </button>
+
+      <!-- Admin Panel Link -->
+      <a href="/admin" class="nav-btn admin-link-btn" title="Buka Dashboard Backend untuk Mengubah Teks & Foto">
+        <span class="btn-icon">⚙️</span>
+        <span class="btn-text">Kelola Web</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Storybook Interactive Stage -->
+  <main class="main-wrapper">
+
+    <div class="storybook-wrapper" id="storybookWrapper">
+
+      <!-- Left / Right Click Turn Zones for Natural Book Page Turning -->
+      <div class="turn-zone turn-zone-left" id="zoneTurnLeft" title="Klik untuk halaman sebelumnya">
+        <span class="zone-hint-arrow">‹</span>
+      </div>
+      <div class="turn-zone turn-zone-right" id="zoneTurnRight" title="Klik untuk halaman berikutnya">
+        <span class="zone-hint-arrow">›</span>
+      </div>
+
+      <!-- Realistic 3D Page Turn Flipper Leaf -->
+      <div class="page-flipper-leaf" id="flipperLeaf">
+        <div class="leaf-front"></div>
+        <div class="leaf-back"></div>
+      </div>
+
+      <!-- ================= SPREAD 0: COVER ================= -->
+      <section class="spread-section active" data-spread="0" id="spread-0">
+        <div class="cover-card">
+          <div class="cover-inner-border">
+            <div class="cover-badge" id="coverBadge">✦ A JOURNEY OF LOVE ✦</div>
+            <p class="cover-edition" id="coverEdition">Special Birthday Edition</p>
+
+            <div class="cover-image-container">
+              <img src="assets/cover.jpg" alt="Romantic couple under starry sky" class="cover-image" id="coverImagePreview">
+              <div class="cover-image-glow"></div>
+            </div>
+
+            <div class="cover-titles">
+              <p class="cover-tagline" id="coverTagline">Selamat Ulang Tahun Untuk</p>
+              <h1 class="cover-name" id="displayCoverName">Sayangku Tercinta</h1>
+              <p class="cover-subtext" id="coverSubtext">"Dari miliaran bintang di angkasa, hatiku selalu memilihmu."</p>
+            </div>
+
+            <button class="open-story-btn" id="openStoryBtn" aria-label="Buka Buku Cerita">
+              <span class="btn-sparkle">✨</span>
+              <span>Buka Buku Cerita Kita</span>
+              <span class="btn-arrow">➔</span>
+            </button>
+            <p class="open-story-sub">Sentuh tombol untuk membuka halaman pertama 📖</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SPREAD 1: HALAMAN 1 & 2 ================= -->
+      <section class="spread-section" data-spread="1" id="spread-1">
+        <div class="book-spread">
+          <!-- Page Left: Prologue -->
+          <div class="book-page page-left">
+            <div class="page-content">
+              <span class="page-tag">PROLOGUE</span>
+              <h2 class="script-title" id="prologueTitle">Awal Dari Segalanya</h2>
+              <div class="ornament-divider">❧ ✦ ❧</div>
+              <p class="body-text" id="prologueP1">
+                Hari ini adalah perayaan atas kelahiran seseorang yang paling berharga di hidupku. Seseorang yang membuat hal-hal biasa menjadi luar biasa, hanya dengan kehadirannya.
+              </p>
+              <div class="quote-box">
+                <p class="quote-content" id="prologueQuote">
+                  "Kamu bukan hanya sekadar seseorang yang kucintai, kamu adalah alasan mengapa aku percaya pada keajaiban takdir."
+                </p>
+              </div>
+              <p class="body-text" id="prologueP2">
+                Buku ini adalah caraku mengabadikan senyummu, mengucap rasa syukur, dan mengirimkan doa tulus di hari spesialmu.
+              </p>
+              <div class="page-num">Hal. 1</div>
+            </div>
+          </div>
+
+          <!-- Page Right: Bab 1 (Kenangan Hangat) -->
+          <div class="book-page page-right">
+            <div class="page-content">
+              <span class="page-tag">BAB 1</span>
+              <h2 class="serif-title" id="chapter1Title">Momen Hangat Bersamamu</h2>
+              <div class="ornament-divider">❧ ☕ ❧</div>
+
+              <div class="polaroid-box polaroid-left">
+                <div class="polaroid-pin">📌</div>
+                <div class="polaroid-photo">
+                  <img src="assets/memory1.jpg" alt="Cozy rainy cafe date" class="polaroid-img" id="memory1Img">
+                </div>
+                <div class="polaroid-label">
+                  <span class="label-handwritten" id="memory1Caption">Tawa di Balik Secangkir Cokelat ☕</span>
+                  <span class="label-date" id="memory1Date">My Favorite Memory</span>
+                </div>
+              </div>
+
+              <p class="body-text" id="memory1Text">
+                Masih teringat bagaimana matamu berbinar saat kita tertawa bersama. Di setiap detiknya, aku menemukan ketenangan yang tak pernah kutemukan di tempat lain.
+              </p>
+              <div class="page-num">Hal. 2</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SPREAD 2: HALAMAN 3 & 4 ================= -->
+      <section class="spread-section" data-spread="2" id="spread-2">
+        <div class="book-spread">
+          <!-- Page Left: Bab 2 (Alasan Mencintaimu) -->
+          <div class="book-page page-left">
+            <div class="page-content">
+              <span class="page-tag">BAB 2</span>
+              <h2 class="serif-title" id="chapter2Title">Alasan Hatiku Memilihmu</h2>
+              <div class="ornament-divider">❧ 💖 ❧</div>
+              <p class="body-sub" id="chapter2Sub">Sentuh kartu di bawah ini untuk melihat apa yang kusukai darimu:</p>
+
+              <div class="cards-grid" id="reasonsGrid">
+                <div class="mini-card" tabindex="0">
+                  <div class="mini-card-icon" id="reasonIcon0">💖</div>
+                  <h3 class="mini-card-title" id="reasonTitle0">Ketulusan Hatimu</h3>
+                  <p class="mini-card-text" id="reasonDesc0">Caramu peduli pada hal-hal kecil membuat siapapun merasa begitu disayangi.</p>
+                </div>
+                <div class="mini-card" tabindex="0">
+                  <div class="mini-card-icon" id="reasonIcon1">🌟</div>
+                  <h3 class="mini-card-title" id="reasonTitle1">Senyuman Penenang</h3>
+                  <p class="mini-card-text" id="reasonDesc1">Di hari paling lelah sekalipun, senyummu selalu menjadi obat terbaikku.</p>
+                </div>
+                <div class="mini-card" tabindex="0">
+                  <div class="mini-card-icon" id="reasonIcon2">🕊️</div>
+                  <h3 class="mini-card-title" id="reasonTitle2">Rumah Bagiku</h3>
+                  <p class="mini-card-text" id="reasonDesc2">Bersamamu, aku bisa menjadi diriku apa adanya tanpa rasa takut.</p>
+                </div>
+                <div class="mini-card" tabindex="0">
+                  <div class="mini-card-icon" id="reasonIcon3">🌷</div>
+                  <h3 class="mini-card-title" id="reasonTitle3">Semangat Hebatmu</h3>
+                  <p class="mini-card-text" id="reasonDesc3">Kerja keras dan kegigihanmu selalu membuatku bangga dan kagum padamu.</p>
+                </div>
+              </div>
+              <div class="page-num">Hal. 3</div>
+            </div>
+          </div>
+
+          <!-- Page Right: Bab 3 (Golden Hour) -->
+          <div class="book-page page-right">
+            <div class="page-content">
+              <span class="page-tag">BAB 3</span>
+              <h2 class="serif-title" id="chapter3Title">Langkah Bersama Menuju Senja</h2>
+              <div class="ornament-divider">❧ 🌅 ❧</div>
+
+              <div class="polaroid-box polaroid-right">
+                <div class="tape-strip"></div>
+                <div class="polaroid-photo">
+                  <img src="assets/memory2.jpg" alt="Golden hour sunset couple" class="polaroid-img" id="memory2Img">
+                </div>
+                <div class="polaroid-label">
+                  <span class="label-handwritten" id="memory2Caption">Langkah Cinta di Bawah Senja 🌾</span>
+                  <span class="label-date" id="memory2Date">Forever & Always</span>
+                </div>
+              </div>
+
+              <p class="body-text" id="memory2Text">
+                "Aku ingin terus menggenggam tanganmu di setiap musim kehidupan. Menemani setiap mimpi dan langkahmu, hari ini dan selamanya."
+              </p>
+              <div class="page-num">Hal. 4</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SPREAD 3: HALAMAN 5 & 6 ================= -->
+      <section class="spread-section" data-spread="3" id="spread-3">
+        <div class="book-spread">
+          <!-- Page Left: Momen Tiup Lilin -->
+          <div class="book-page page-left cake-page">
+            <div class="page-content">
+              <span class="page-tag">INTERACTIVE</span>
+              <h2 class="script-title" id="cakeTitle">Buat Sebuah Permintaan ✨</h2>
+              <div class="ornament-divider">❧ 🎂 ❧</div>
+
+              <!-- Animated 3D Cake -->
+              <div class="birthday-cake" id="birthdayCake" title="Klik untuk meniup lilin!">
+                <div class="candles-wrap">
+                  <div class="single-candle candle-left">
+                    <div class="flame" id="flame-1"></div>
+                    <div class="wick"></div>
+                    <div class="stick"></div>
+                  </div>
+                  <div class="single-candle candle-center">
+                    <div class="flame" id="flame-2"></div>
+                    <div class="wick"></div>
+                    <div class="stick"></div>
+                  </div>
+                  <div class="single-candle candle-right">
+                    <div class="flame" id="flame-3"></div>
+                    <div class="wick"></div>
+                    <div class="stick"></div>
+                  </div>
+                </div>
+
+                <div class="cake-tier-top">
+                  <div class="cake-topping">🍓 🍓 🍓</div>
+                  <div class="icing-drips">
+                    <span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="cake-tier-base">
+                  <div class="base-ribbon"></div>
+                </div>
+                <div class="plate-base"></div>
+              </div>
+
+              <div class="cake-controls">
+                <button class="action-pill-btn" id="blowBtn">
+                  <span>💨</span>
+                  <span id="blowBtnLabel">Tiup Lilin Sekarang</span>
+                </button>
+                <p class="cake-instruction" id="cakeInstruction">
+                  Pejamkan mata, panjatkan harapan terbaikmu, lalu klik tombol atau lilin di atas!
+                </p>
+              </div>
+
+              <!-- Wish Reveal Box -->
+              <div class="wish-box hidden" id="wishBox">
+                <div class="wish-title" id="wishTitle">🌟 Harapanmu Telah Diterbangkan ke Langit 🌟</div>
+                <p class="wish-msg" id="wishMessage">
+                  "Semoga setiap langkahmu diberkahi kemudahan, kesehatan, dan kebahagiaan tanpa akhir. Amin!"
+                </p>
+              </div>
+
+              <div class="page-num">Hal. 5</div>
+            </div>
+          </div>
+
+          <!-- Page Right: Surat Spesial Cinta -->
+          <div class="book-page page-right letter-page">
+            <div class="page-content">
+              <span class="page-tag">SURAT SPESIAL</span>
+              <h2 class="serif-title" id="letterTitle">Sepucuk Surat Dari Hati</h2>
+              <div class="ornament-divider">❧ 💌 ❧</div>
+
+              <!-- Envelope with Wax Seal -->
+              <div class="envelope-container" id="envelopeContainer">
+                <div class="vintage-envelope" id="vintageEnvelope">
+                  <div class="envelope-body"></div>
+                  <div class="letter-sheet" id="letterSheet">
+                    <div class="letter-top">
+                      <span class="letter-date" id="displayLetterDate">25 Oktober 2026</span>
+                      <span class="letter-recipient">Kepada: <strong id="displayLetterTo">Sayangku</strong></span>
+                    </div>
+                    <div class="letter-message" id="displayLetterMsg">
+                      Selamat ulang tahun yang terindah, sayangku. Terima kasih telah hadir dan menjadi bagian paling berharga dalam hidupku. Semoga senyummu tak pernah pudar, impianmu tercapai satu demi satu, dan cintaku selalu menjadi pelabuhan terhangatmu.
+                    </div>
+                    <div class="letter-sign">
+                      Dengan segenap cintaku,<br>
+                      <span class="sign-name" id="displayLetterFrom">Teman Hidupmu</span> ❤️
+                    </div>
+                  </div>
+                  <div class="envelope-flap" id="envelopeFlap"></div>
+                  <div class="wax-seal" id="waxSeal" title="Klik segel lilin untuk membuka surat">
+                    <span>LOVE</span>
+                  </div>
+                </div>
+                <p class="envelope-help" id="envelopeHelpText">Klik segel lilin merah di atas untuk membuka surat 💌</p>
+              </div>
+
+              <div class="page-num">Hal. 6</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SPREAD 4: HALAMAN 7 & BACK COVER ================= -->
+      <section class="spread-section" data-spread="4" id="spread-4">
+        <div class="book-spread">
+          <!-- Page Left: Kado Kejutan -->
+          <div class="book-page page-left">
+            <div class="page-content">
+              <span class="page-tag">SURPRISE</span>
+              <h2 class="script-title" id="giftTitle">Kado Spesial Untukmu</h2>
+              <div class="ornament-divider">❧ 🎁 ❧</div>
+
+              <div class="gift-area">
+                <div class="gift-box-3d" id="giftBox" title="Klik untuk membuka kado!">
+                  <div class="gift-lid-box" id="giftLidBox">
+                    <div class="gift-ribbon-bow">🎀</div>
+                  </div>
+                  <div class="gift-body-box">
+                    <div class="gift-stripe-v"></div>
+                    <div class="gift-stripe-h"></div>
+                  </div>
+                </div>
+                <p class="gift-prompt" id="giftPrompt">Sentuh kotak kado ini untuk membukanya! 🎁</p>
+              </div>
+
+              <div class="gift-message-box hidden" id="giftMsgBox">
+                <div class="gift-msg-title">💖 Janji Cintaku 💖</div>
+                <p class="gift-msg-text" id="giftSecretMessage">
+                  "Kado terbesarku adalah waktu, kesetiaan, dan cintaku yang akan selalu ada untukmu selamanya."
+                </p>
+              </div>
+
+              <div class="page-num">Hal. 7</div>
+            </div>
+          </div>
+
+          <!-- Page Right: Back Cover -->
+          <div class="book-page page-right back-cover-page">
+            <div class="cover-inner-border back-cover-content">
+              <div class="back-emblem">✦ ∞ ✦</div>
+              <h2 class="script-title back-title" id="endingTitle">Cinta yang Tak Pernah Usai</h2>
+              <p class="back-quote" id="endingQuote">
+                "Aku mencintaimu bukan hanya untuk hari ini, melainkan untuk setiap hari esok yang belum kita jalani."
+              </p>
+              
+              <div class="back-actions">
+                <button class="back-action-btn" id="rainLoveBtn">
+                  <span>💖 Hujan Cinta</span>
+                </button>
+                <button class="back-action-btn replay-action" id="readAgainBtn">
+                  <span>↺ Baca Dari Awal</span>
+                </button>
+              </div>
+
+              <div class="page-num text-white">Akhir Cerita (Dan Awal Selamanya)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div> <!-- /storybook-wrapper -->
+
+    <!-- Mobile Swipe Guide Badge -->
+    <div class="mobile-guide-badge">
+      <span>📖 Geser layar atau klik tombol untuk membalik halaman</span>
+    </div>
+
+    <!-- Floating Navigation Bar -->
+    <nav class="bottom-nav-bar" aria-label="Navigasi Halaman Buku">
+      <button class="nav-arrow-btn prev" id="prevSpreadBtn" disabled aria-label="Halaman Sebelumnya">
+        <span class="arrow-sym">‹</span>
+        <span class="btn-text">Sebelumnya</span>
+      </button>
+
+      <!-- Indicator Dots -->
+      <div class="spread-dots" id="spreadDots">
+        <button class="dot-btn active" data-spread-idx="0" title="Halaman 1"></button>
+        <button class="dot-btn" data-spread-idx="1" title="Halaman 2"></button>
+        <button class="dot-btn" data-spread-idx="2" title="Halaman 3"></button>
+        <button class="dot-btn" data-spread-idx="3" title="Halaman 4"></button>
+        <button class="dot-btn" data-spread-idx="4" title="Halaman 5"></button>
+      </div>
+
+      <button class="nav-arrow-btn next" id="nextSpreadBtn" aria-label="Halaman Berikutnya">
+        <span class="btn-text">Berikutnya</span>
+        <span class="arrow-sym">›</span>
+      </button>
+    </nav>
+  </main>
+
+  <!-- Audio Player with user's selected song Jaz - Bersamamu -->
+  <audio id="audioPlayer" preload="auto" loop src="assets/music/Jaz - Bersamamu (Official Lyric Video).mp3"></audio>
+
+  <script src="app.js"></script>
+</body>
+</html>

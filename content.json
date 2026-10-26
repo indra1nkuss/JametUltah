@@ -1,0 +1,74 @@
+{
+  "music": {
+    "src": "assets/music/Jaz - Bersamamu (Official Lyric Video).mp3",
+    "title": "Jaz - Bersamamu"
+  },
+  "cover": {
+    "badge": "✦ A JOURNEY OF LOVE ✦",
+    "edition": "Special Birthday Edition",
+    "tagline": "Selamat Ulang Tahun Untuk",
+    "recipientName": "Sayangku Tercinta",
+    "subtext": "\"Dari miliaran bintang di angkasa, hatiku selalu memilihmu.\"",
+    "photo": "assets/cover.jpg"
+  },
+  "spread1": {
+    "prologueTitle": "Awal Dari Segalanya",
+    "prologueP1": "Hari ini adalah perayaan atas kelahiran seseorang yang paling berharga di hidupku. Seseorang yang membuat hal-hal biasa menjadi luar biasa, hanya dengan kehadirannya.",
+    "prologueQuote": "\"Kamu bukan hanya sekadar seseorang yang kucintai, kamu adalah alasan mengapa aku percaya pada keajaiban takdir.\"",
+    "prologueP2": "Buku ini adalah caraku mengabadikan senyummu, mengucap rasa syukur, dan mengirimkan doa tulus di hari spesialmu.",
+    "chapter1Title": "Momen Hangat Bersamamu",
+    "memory1Photo": "assets/memory1.jpg",
+    "memory1Caption": "Tawa di Balik Secangkir Cokelat ☕",
+    "memory1Date": "My Favorite Memory",
+    "memory1Text": "Masih teringat bagaimana matamu berbinar saat kita tertawa bersama. Di setiap detiknya, aku menemukan ketenangan yang tak pernah kutemukan di tempat lain."
+  },
+  "spread2": {
+    "chapter2Title": "Alasan Hatiku Memilihmu",
+    "chapter2Sub": "Sentuh kartu di bawah ini untuk melihat apa yang kusukai darimu:",
+    "reasons": [
+      {
+        "icon": "💖",
+        "title": "Ketulusan Hatimu",
+        "desc": "Caramu peduli pada hal-hal kecil membuat siapapun merasa begitu disayangi."
+      },
+      {
+        "icon": "🌟",
+        "title": "Senyuman Penenang",
+        "desc": "Di hari paling lelah sekalipun, senyummu selalu menjadi obat terbaikku."
+      },
+      {
+        "icon": "🕊️",
+        "title": "Rumah Bagiku",
+        "desc": "Bersamamu, aku bisa menjadi diriku apa adanya tanpa rasa takut."
+      },
+      {
+        "icon": "🌷",
+        "title": "Semangat Hebatmu",
+        "desc": "Kerja keras dan kegigihanmu selalu membuatku bangga dan kagum padamu."
+      }
+    ],
+    "chapter3Title": "Langkah Bersama Menuju Senja",
+    "memory2Photo": "assets/memory2.jpg",
+    "memory2Caption": "Langkah Cinta di Bawah Senja 🌾",
+    "memory2Date": "Forever & Always",
+    "memory2Text": "\"Aku ingin terus menggenggam tanganmu di setiap musim kehidupan. Menemani setiap mimpi dan langkahmu, hari ini dan selamanya.\""
+  },
+  "spread3": {
+    "cakeTitle": "Buat Sebuah Permintaan ✨",
+    "cakeInstruction": "Pejamkan mata, panjatkan harapan terbaikmu, lalu klik tombol atau lilin di atas!",
+    "wishTitle": "🌟 Harapanmu Telah Diterbangkan ke Langit 🌟",
+    "wishMessage": "\"Semoga setiap langkahmu diberkahi kemudahan, kesehatan, dan kebahagiaan tanpa akhir. Amin!\"",
+    "letterTitle": "Sepucuk Surat Dari Hati",
+    "letterDate": "25 Oktober 2026",
+    "letterRecipient": "Sayangku",
+    "letterContent": "Selamat ulang tahun yang terindah, sayangku. Terima kasih telah hadir dan menjadi bagian paling berharga dalam hidupku. Semoga senyummu tak pernah pudar, impianmu tercapai satu demi satu, dan cintaku selalu menjadi pelabuhan terhangatmu.",
+    "letterSender": "Teman Hidupmu"
+  },
+  "spread4": {
+    "giftTitle": "Kado Spesial Untukmu",
+    "giftPrompt": "Sentuh kotak kado ini untuk membukanya! 🎁",
+    "giftSecretMessage": "\"Kado terbesarku adalah waktu, kesetiaan, dan cintaku yang akan selalu ada untukmu selamanya.\"",
+    "endingTitle": "Cinta yang Tak Pernah Usai",
+    "endingQuote": "\"Aku mencintaimu bukan hanya untuk hari ini, melainkan untuk setiap hari esok yang belum kita jalani.\""
+  }
+}
