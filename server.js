@@ -331,11 +331,15 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
-// Start Server
-app.listen(PORT, () => {
-  console.log('=======================================================');
-  console.log(`✨ Birthday Storybook Server: http://localhost:${PORT}`);
-  console.log(`🛠️  Admin Dashboard: http://localhost:${PORT}/admin`);
-  console.log(`📦 Mode: ${supabaseReady ? 'Supabase Cloud' : 'Lokal (content.json)'}`);
-  console.log('=======================================================');
-});
+// Start Server (only listen if run directly, not in Vercel serverless environment)
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log('=======================================================');
+    console.log(`✨ Birthday Storybook Server: http://localhost:${PORT}`);
+    console.log(`🛠️  Admin Dashboard: http://localhost:${PORT}/admin`);
+    console.log(`📦 Mode: ${supabaseReady ? 'Supabase Cloud' : 'Lokal (content.json)'}`);
+    console.log('=======================================================');
+  });
+}
+
+module.exports = app;
