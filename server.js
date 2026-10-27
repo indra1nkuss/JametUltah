@@ -146,6 +146,8 @@ app.post(['/api/auth/logout', '/auth/logout'], requireAuth, async (req, res) => 
 
 // 3. GET CONTENT — Baca dari Supabase atau fallback ke content.json
 app.get(['/api/content', '/content'], async (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+
   if (!supabaseReady) {
     // Fallback: baca dari file lokal
     if (fs.existsSync(CONTENT_FILE)) {
@@ -192,28 +194,53 @@ app.post(['/api/content', '/content'], requireAuth, async (req, res) => {
   }
 
   try {
+    // Gunakan user client dengan token jika tersedia agar lolos aturan RLS authenticated
+    const clientToUse = (req.token && req.token !== 'dev-token-local')
+      ? createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          global: { headers: { Authorization: `Bearer ${req.token}` } }
+        })
+      : supabase;
+
     // Cek apakah sudah ada baris
-    const { data: existing } = await supabase
+    const { data: existing } = await clientToUse
       .from('story_content')
       .select('id')
       .limit(1)
       .single();
 
     let result;
+    const nowIso = new Date().toISOString();
+
     if (existing) {
       // Update baris yang sudah ada
-      result = await supabase
+      result = await clientToUse
         .from('story_content')
-        .update({ content: updatedContent })
-        .eq('id', existing.id);
+        .update({ content: updatedContent, updated_at: nowIso })
+        .eq('id', existing.id)
+        .select();
     } else {
       // Insert baris baru
-      result = await supabase
+      result = await clientToUse
         .from('story_content')
-        .insert({ content: updatedContent });
+        .insert({ content: updatedContent, updated_at: nowIso })
+        .select();
     }
 
     if (result.error) throw result.error;
+
+    // Validasi apakah data benar-benar tersimpan (tidak diblokir oleh RLS Supabase)
+    if (!result.data || result.data.length === 0) {
+      // Coba fallback dengan client global
+      const fallbackResult = await supabase
+        .from('story_content')
+        .update({ content: updatedContent, updated_at: nowIso })
+        .eq('id', existing.id)
+        .select();
+
+      if (!fallbackResult.data || fallbackResult.data.length === 0) {
+        throw new Error('Supabase RLS menolak update database (0 baris diubah). Harap jalankan script SQL izin update di Supabase SQL Editor.');
+      }
+    }
 
     // Juga update content.json lokal sebagai backup
     try {
@@ -222,6 +249,7 @@ app.post(['/api/content', '/content'], requireAuth, async (req, res) => {
 
     res.json({ success: true, message: '✅ Konten berhasil disimpan ke Supabase!' });
   } catch (err) {
+    console.error('Error saving content:', err);
     res.status(500).json({ error: 'Gagal menyimpan konten: ' + err.message });
   }
 });

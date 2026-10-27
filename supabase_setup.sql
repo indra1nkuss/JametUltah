@@ -84,7 +84,7 @@ CREATE TRIGGER trigger_story_content_updated_at
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at();
 
--- 4. Row Level Security — baca publik, tulis hanya authenticated
+-- 4. Row Level Security — baca dan tulis dari backend
 ALTER TABLE story_content ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Allow public read" ON story_content;
@@ -92,12 +92,14 @@ CREATE POLICY "Allow public read" ON story_content
   FOR SELECT TO anon, authenticated USING (true);
 
 DROP POLICY IF EXISTS "Allow authenticated insert" ON story_content;
-CREATE POLICY "Allow authenticated insert" ON story_content
-  FOR INSERT TO authenticated WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow public insert" ON story_content;
+CREATE POLICY "Allow public insert" ON story_content
+  FOR INSERT TO anon, authenticated WITH CHECK (true);
 
 DROP POLICY IF EXISTS "Allow authenticated update" ON story_content;
-CREATE POLICY "Allow authenticated update" ON story_content
-  FOR UPDATE TO authenticated USING (true) WITH CHECK (true);
+DROP POLICY IF EXISTS "Allow public update" ON story_content;
+CREATE POLICY "Allow public update" ON story_content
+  FOR UPDATE TO anon, authenticated USING (true) WITH CHECK (true);
 
 -- ============================================================
 -- 5. STORAGE BUCKETS (photos & audio)

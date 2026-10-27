@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================
   async function fetchStoryContent() {
     try {
-      const res = await fetch('/api/content');
+      const res = await fetch('/api/content?t=' + Date.now(), { cache: 'no-store' });
       if (res.ok) {
         storyContent = await res.json();
         renderContent(storyContent);
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fallback directly to content.json (for static CDN / Vercel)
     try {
-      const resStatic = await fetch('content.json');
+      const resStatic = await fetch('content.json?t=' + Date.now(), { cache: 'no-store' });
       if (resStatic.ok) {
         storyContent = await resStatic.json();
         renderContent(storyContent);

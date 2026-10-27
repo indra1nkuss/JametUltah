@@ -860,7 +860,8 @@
     // ============================================================
     async function loadContent() {
       try {
-        const res = await fetch('/api/content', {
+        const res = await fetch('/api/content?t=' + Date.now(), {
+          cache: 'no-store',
           headers: { 'Authorization': `Bearer ${authToken}` }
         });
         currentData = await res.json();
