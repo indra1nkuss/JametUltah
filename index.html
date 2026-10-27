@@ -15,6 +15,18 @@
   <!-- Canvas Confetti Library -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+  <!-- Instant local cache hydration to prevent old photo flicker during loading -->
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('jamet_story_content');
+        if (saved) {
+          window.__PRELOADED_STORY__ = JSON.parse(saved);
+        }
+      } catch(e) {}
+    })();
+  </script>
+
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -76,7 +88,7 @@
             <p class="cover-edition" id="coverEdition">Special Birthday Edition</p>
 
             <div class="cover-image-container">
-              <img src="assets/cover.jpg" alt="Romantic couple under starry sky" class="cover-image" id="coverImagePreview">
+              <img src="https://ngxtvaifxltuakwwbvyk.supabase.co/storage/v1/object/public/photos/1793114866516-berdua.jpeg" alt="Romantic couple under starry sky" class="cover-image" id="coverImagePreview">
               <div class="cover-image-glow"></div>
             </div>
 
@@ -91,7 +103,7 @@
               <span>Buka Buku Cerita Kita</span>
               <span class="btn-arrow">➔</span>
             </button>
-            <p class="open-story-sub" id="openStorySub">Geser ke kiri atau sentuh tombol untuk membuka 📖</p>
+            <p class="open-story-sub" id="openStorySub">Geser ke kanan atau sentuh tombol untuk membuka 📖</p>
           </div>
         </div>
       </section>
@@ -130,7 +142,7 @@
               <div class="polaroid-box polaroid-left">
                 <div class="polaroid-pin">📌</div>
                 <div class="polaroid-photo">
-                  <img src="assets/memory1.jpg" alt="Cozy rainy cafe date" class="polaroid-img" id="memory1Img">
+                  <img src="https://ngxtvaifxltuakwwbvyk.supabase.co/storage/v1/object/public/photos/1793114884137-berdua1.jpeg" alt="Cozy rainy cafe date" class="polaroid-img" id="memory1Img">
                 </div>
                 <div class="polaroid-label">
                   <span class="label-handwritten" id="memory1Caption">Tawa di Balik Secangkir Cokelat ☕</span>
@@ -375,7 +387,7 @@
 
     <!-- Mobile Swipe Guide Badge -->
     <div class="mobile-guide-badge">
-      <span>📖 Geser layar ke kiri untuk membalik halaman</span>
+      <span>📖 Geser layar ke kanan untuk membalik halaman</span>
     </div>
 
     <!-- Floating Navigation Bar -->

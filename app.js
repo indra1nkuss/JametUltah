@@ -62,6 +62,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // 1. DYNAMIC CONTENT INJECTION FROM BACKEND / CONTENT.JSON
   // =========================================================
   async function fetchStoryContent() {
+    // Render preloaded content instantly if available to prevent any photo flicker
+    if (window.__PRELOADED_STORY__) {
+      storyContent = window.__PRELOADED_STORY__;
+      renderContent(storyContent);
+    }
+
     try {
       const res = await fetch('/api/content?t=' + Date.now(), { cache: 'no-store' });
       if (res.ok) {
@@ -150,6 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.spread4.endingTitle) document.getElementById('endingTitle').textContent = data.spread4.endingTitle;
       if (data.spread4.endingQuote) document.getElementById('endingQuote').textContent = data.spread4.endingQuote;
     }
+
+    // Persist in localStorage for 0ms instant load on refresh without photo flicker
+    try {
+      localStorage.setItem('jamet_story_content', JSON.stringify(data));
+    } catch (e) {}
   }
 
   // =========================================================
@@ -273,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         isAnimatingFlip = false;
-      }, 650);
+      }, 700);
     } else {
       mobileCards.forEach((c, idx) => {
         c.classList.toggle('mobile-active', idx === currentMobilePage);
@@ -401,17 +412,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const diffX = touchEndX - touchStartX;
     const diffY = touchEndY - touchStartY;
 
-    // Minimum swipe threshold 35px
-    if (Math.abs(diffX) > 35 && Math.abs(diffX) > Math.abs(diffY)) {
-      if (diffX < 0) {
-        // Direct touch gesture on mobile: trigger music autoplay on cover swipe
-        if (isMobile && currentMobilePage === 0 && !isMusicPlaying) {
-          startMusic();
-        } else if (!isMobile && currentSpread === 0 && !isMusicPlaying) {
-          startMusic();
-        }
+    // Minimum swipe threshold 30px
+    if (Math.abs(diffX) > 30 && Math.abs(diffX) > Math.abs(diffY)) {
+      // Trigger music on cover swipe
+      if (isMobile && currentMobilePage === 0 && !isMusicPlaying) {
+        startMusic();
+      } else if (!isMobile && currentSpread === 0 && !isMusicPlaying) {
+        startMusic();
+      }
+
+      // On cover page (Page 0): ANY horizontal swipe opens the book!
+      if ((isMobile && currentMobilePage === 0) || (!isMobile && currentSpread === 0)) {
+        turnNext();
+        return;
+      }
+
+      // GESER KE KANAN (diffX > 0): MEMBUKA / HALAMAN BERIKUTNYA
+      if (diffX > 0) {
         turnNext();
       } else {
+        // GESER KE KIRI (diffX < 0): MENUTUP / KEMBALI KE DEPAN
         turnPrev();
       }
     }

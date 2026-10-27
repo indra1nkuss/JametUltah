@@ -1,74 +1,72 @@
 {
-  "music": {
-    "src": "assets/music/Jaz - Bersamamu (Official Lyric Video).mp3",
-    "title": "Jaz - Bersamamu"
-  },
   "cover": {
     "badge": "✦ A JOURNEY OF LOVE ✦",
+    "photo": "https://ngxtvaifxltuakwwbvyk.supabase.co/storage/v1/object/public/photos/1793114866516-berdua.jpeg",
     "edition": "Special Birthday Edition",
-    "tagline": "Selamat Ulang Tahun Untuk",
-    "recipientName": "Sayangku Tercinta",
     "subtext": "\"Dari miliaran bintang di angkasa, hatiku selalu memilihmu.\"",
-    "photo": "assets/cover.jpg"
+    "tagline": "Selamat Ulang Tahun Untuk",
+    "recipientName": "jamet"
+  },
+  "music": {
+    "src": "",
+    "title": "— Pilih lagu —"
   },
   "spread1": {
-    "prologueTitle": "Awal Dari Segalanya",
-    "prologueP1": "Hari ini adalah perayaan atas kelahiran seseorang yang paling berharga di hidupku. Seseorang yang membuat hal-hal biasa menjadi luar biasa, hanya dengan kehadirannya.",
-    "prologueQuote": "\"Kamu bukan hanya sekadar seseorang yang kucintai, kamu adalah alasan mengapa aku percaya pada keajaiban takdir.\"",
+    "prologueP1": "Hari ini adalah perayaan atas kelahiran seseorang yang paling berharga di hidupku.",
     "prologueP2": "Buku ini adalah caraku mengabadikan senyummu, mengucap rasa syukur, dan mengirimkan doa tulus di hari spesialmu.",
-    "chapter1Title": "Momen Hangat Bersamamu",
-    "memory1Photo": "assets/memory1.jpg",
-    "memory1Caption": "Tawa di Balik Secangkir Cokelat ☕",
     "memory1Date": "My Favorite Memory",
-    "memory1Text": "Masih teringat bagaimana matamu berbinar saat kita tertawa bersama. Di setiap detiknya, aku menemukan ketenangan yang tak pernah kutemukan di tempat lain."
+    "memory1Text": "Masih teringat bagaimana matamu berbinar saat kita tertawa bersama.",
+    "memory1Photo": "https://ngxtvaifxltuakwwbvyk.supabase.co/storage/v1/object/public/photos/1793114884137-berdua1.jpeg",
+    "chapter1Title": "Momen Hangat Bersamamu",
+    "prologueQuote": "\"Kamu bukan hanya sekadar seseorang yang kucintai, kamu adalah alasan mengapa aku percaya pada keajaiban takdir.\"",
+    "prologueTitle": "Awal Dari Segalanya",
+    "memory1Caption": "Tawa di Balik Secangkir Cokelat ☕"
   },
   "spread2": {
-    "chapter2Title": "Alasan Hatiku Memilihmu",
-    "chapter2Sub": "Sentuh kartu di bawah ini untuk melihat apa yang kusukai darimu:",
     "reasons": [
       {
+        "desc": "Caramu peduli pada hal-hal kecil membuat siapapun merasa begitu disayangi.",
         "icon": "💖",
-        "title": "Ketulusan Hatimu",
-        "desc": "Caramu peduli pada hal-hal kecil membuat siapapun merasa begitu disayangi."
+        "title": "Ketulusan Hatimu"
       },
       {
+        "desc": "Di hari paling lelah sekalipun, senyummu selalu menjadi obat terbaikku.",
         "icon": "🌟",
-        "title": "Senyuman Penenang",
-        "desc": "Di hari paling lelah sekalipun, senyummu selalu menjadi obat terbaikku."
+        "title": "Senyuman Penenang"
       },
       {
+        "desc": "Bersamamu, aku bisa menjadi diriku apa adanya tanpa rasa takut.",
         "icon": "🕊️",
-        "title": "Rumah Bagiku",
-        "desc": "Bersamamu, aku bisa menjadi diriku apa adanya tanpa rasa takut."
+        "title": "Rumah Bagiku"
       },
       {
+        "desc": "Kerja keras dan kegigihanmu selalu membuatku bangga dan kagum padamu.",
         "icon": "🌷",
-        "title": "Semangat Hebatmu",
-        "desc": "Kerja keras dan kegigihanmu selalu membuatku bangga dan kagum padamu."
+        "title": "Semangat Hebatmu"
       }
     ],
-    "chapter3Title": "Langkah Bersama Menuju Senja",
-    "memory2Photo": "assets/memory2.jpg",
-    "memory2Caption": "Langkah Cinta di Bawah Senja 🌾",
+    "chapter2Sub": "Sentuh kartu di bawah ini untuk melihat apa yang kusukai darimu:",
     "memory2Date": "Forever & Always",
-    "memory2Text": "\"Aku ingin terus menggenggam tanganmu di setiap musim kehidupan. Menemani setiap mimpi dan langkahmu, hari ini dan selamanya.\""
+    "memory2Text": "\"Aku ingin terus menggenggam tanganmu di setiap musim kehidupan.\"",
+    "memory2Photo": "",
+    "chapter2Title": "Alasan Hatiku Memilihmu",
+    "chapter3Title": "Langkah Bersama Menuju Senja",
+    "memory2Caption": "Langkah Cinta di Bawah Senja 🌾"
   },
   "spread3": {
     "cakeTitle": "Buat Sebuah Permintaan ✨",
-    "cakeInstruction": "Pejamkan mata, panjatkan harapan terbaikmu, lalu klik tombol atau lilin di atas!",
-    "wishTitle": "🌟 Harapanmu Telah Diterbangkan ke Langit 🌟",
-    "wishMessage": "\"Semoga setiap langkahmu diberkahi kemudahan, kesehatan, dan kebahagiaan tanpa akhir. Amin!\"",
+    "letterDate": "27 Oktober 2026",
     "letterTitle": "Sepucuk Surat Dari Hati",
-    "letterDate": "25 Oktober 2026",
-    "letterRecipient": "Sayangku",
-    "letterContent": "Selamat ulang tahun yang terindah, sayangku. Terima kasih telah hadir dan menjadi bagian paling berharga dalam hidupku. Semoga senyummu tak pernah pudar, impianmu tercapai satu demi satu, dan cintaku selalu menjadi pelabuhan terhangatmu.",
-    "letterSender": "Teman Hidupmu"
+    "wishMessage": "\"Semoga setiap langkahmu diberkahi kemudahan, kesehatan, dan kebahagiaan tanpa akhir. Amin!\"",
+    "letterSender": "Teman Hidupmu",
+    "letterContent": "Selamat ulang tahun yang terindah, sayangku. Terima kasih telah hadir dan menjadi bagian paling berharga dalam hidupku.",
+    "letterRecipient": "Sayangku"
   },
   "spread4": {
     "giftTitle": "Kado Spesial Untukmu",
-    "giftPrompt": "Sentuh kotak kado ini untuk membukanya! 🎁",
-    "giftSecretMessage": "\"Kado terbesarku adalah waktu, kesetiaan, dan cintaku yang akan selalu ada untukmu selamanya.\"",
+    "endingQuote": "\"Aku mencintaimu bukan hanya untuk hari ini, melainkan untuk setiap hari esok yang belum kita jalani.\"",
     "endingTitle": "Cinta yang Tak Pernah Usai",
-    "endingQuote": "\"Aku mencintaimu bukan hanya untuk hari ini, melainkan untuk setiap hari esok yang belum kita jalani.\""
-  }
+    "giftSecretMessage": "\"Kado terbesarku adalah waktu, kesetiaan, dan cintaku yang akan selalu ada untukmu selamanya.\""
+  },
+  "_updatedAt": "2026-10-27T14:05:08.454451+00:00"
 }
