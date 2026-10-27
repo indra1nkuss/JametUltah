@@ -103,7 +103,7 @@ async function requireAuth(req, res, next) {
 // ==========================================
 
 // 1. LOGIN — Autentikasi admin dengan Supabase Auth
-app.post('/api/auth/login', async (req, res) => {
+app.post(['/api/auth/login', '/auth/login'], async (req, res) => {
   const { email, password } = req.body;
   
   if (!supabaseReady) {
@@ -133,7 +133,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 // 2. LOGOUT
-app.post('/api/auth/logout', requireAuth, async (req, res) => {
+app.post(['/api/auth/logout', '/auth/logout'], requireAuth, async (req, res) => {
   if (!supabaseReady) return res.json({ success: true });
   
   try {
@@ -145,7 +145,7 @@ app.post('/api/auth/logout', requireAuth, async (req, res) => {
 });
 
 // 3. GET CONTENT — Baca dari Supabase atau fallback ke content.json
-app.get('/api/content', async (req, res) => {
+app.get(['/api/content', '/content'], async (req, res) => {
   if (!supabaseReady) {
     // Fallback: baca dari file lokal
     if (fs.existsSync(CONTENT_FILE)) {
@@ -178,7 +178,7 @@ app.get('/api/content', async (req, res) => {
 });
 
 // 4. UPDATE CONTENT — Simpan ke Supabase (butuh auth)
-app.post('/api/content', requireAuth, async (req, res) => {
+app.post(['/api/content', '/content'], requireAuth, async (req, res) => {
   const updatedContent = req.body;
 
   if (!supabaseReady) {
@@ -227,7 +227,7 @@ app.post('/api/content', requireAuth, async (req, res) => {
 });
 
 // 5. UPLOAD FILE — Upload ke Supabase Storage atau lokal (butuh auth)
-app.post('/api/upload', requireAuth, upload.single('file'), async (req, res) => {
+app.post(['/api/upload', '/upload'], requireAuth, upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'Tidak ada file yang diunggah.' });
   }
@@ -291,7 +291,7 @@ app.post('/api/upload', requireAuth, upload.single('file'), async (req, res) => 
 });
 
 // 6. LIST AUDIO dari Supabase Storage
-app.get('/api/music-list', async (req, res) => {
+app.get(['/api/music-list', '/music-list'], async (req, res) => {
   if (!supabaseReady) {
     // Fallback: scan folder lokal
     const musicDir = path.join(__dirname, 'assets', 'music');
@@ -318,7 +318,7 @@ app.get('/api/music-list', async (req, res) => {
 });
 
 // 7. STATUS API — Cek apakah Supabase terhubung
-app.get('/api/status', (req, res) => {
+app.get(['/api/status', '/status'], (req, res) => {
   res.json({
     supabase: supabaseReady,
     mode: supabaseReady ? 'supabase' : 'local',
@@ -326,8 +326,13 @@ app.get('/api/status', (req, res) => {
   });
 });
 
-// 8. Admin Dashboard Route
-app.get('/admin', (req, res) => {
+// 8. Halaman Utama Pengunjung
+app.get(['/', '/index.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// 9. Admin Dashboard Route
+app.get(['/admin', '/admin.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
