@@ -3,113 +3,208 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CMS Admin Panel | Kustomisasi Storybook Ulang Tahun</title>
-  
+  <title>CMS Admin | Storybook Ulang Tahun</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
-  
+
+  <!-- Supabase JS CDN (untuk browser) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
   <style>
     :root {
       --bg: #0f0412;
-      --card-bg: #1e0923;
-      --card-border: rgba(212, 175, 55, 0.3);
+      --card: #1e0923;
+      --card-border: rgba(212,175,55,0.3);
       --gold: #d4af37;
       --gold-light: #f7e7a7;
       --rose: #e84393;
       --text: #f5e8f4;
-      --text-muted: #a68ba2;
+      --muted: #a68ba2;
+      --green: #2ecc71;
+      --red: #e74c3c;
       --radius: 12px;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      --shadow: 0 10px 30px rgba(0,0,0,0.6);
     }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background: radial-gradient(circle at 50% 10%, #290b2e 0%, #110314 60%, #08010a 100%);
       color: var(--text);
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
-      padding-bottom: 90px;
     }
 
-    /* Admin Header */
+    /* ===========================
+       LOGIN OVERLAY
+    =========================== */
+    #loginOverlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 30%, #2d0a35 0%, #0f0112 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .login-box {
+      background: linear-gradient(145deg, #1e0923, #2a0d33);
+      border: 1px solid rgba(212,175,55,0.4);
+      border-radius: 20px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.8), 0 0 40px rgba(212,175,55,0.08);
+      text-align: center;
+    }
+
+    .login-icon { font-size: 3rem; margin-bottom: 8px; }
+
+    .login-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.8rem;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+    }
+
+    .login-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 28px; }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    .status-badge.cloud { background: rgba(46,204,113,0.15); border: 1px solid rgba(46,204,113,0.4); color: #2ecc71; }
+    .status-badge.local { background: rgba(241,196,15,0.15); border: 1px solid rgba(241,196,15,0.4); color: #f1c40f; }
+
+    .form-group { margin-bottom: 16px; text-align: left; }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: #e3d2e1; margin-bottom: 6px; }
+    .form-group input {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus { border-color: var(--gold); background: rgba(255,255,255,0.11); }
+
+    .btn-login {
+      width: 100%;
+      background: linear-gradient(135deg, #e84393 0%, #a855f7 100%);
+      border: none;
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 13px;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 6px 20px rgba(232,67,147,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232,67,147,0.5); }
+    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .login-error {
+      background: rgba(231,76,60,0.15);
+      border: 1px solid rgba(231,76,60,0.4);
+      color: #e74c3c;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.84rem;
+      margin-top: 14px;
+      display: none;
+    }
+
+    /* ===========================
+       MAIN ADMIN UI
+    =========================== */
+    #adminApp { display: none; padding-bottom: 90px; }
+
     .admin-header {
-      background: rgba(18, 5, 22, 0.85);
+      background: rgba(18,5,22,0.88);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid var(--card-border);
-      padding: 16px 28px;
+      padding: 14px 24px;
       position: sticky;
       top: 0;
       z-index: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
       gap: 12px;
     }
 
-    .brand-icon {
-      font-size: 1.6rem;
-    }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-icon { font-size: 1.5rem; }
+    .brand-title { font-size: 1.15rem; font-weight: 700; color: var(--gold-light); }
+    .brand-sub { font-size: 0.75rem; color: var(--muted); }
 
-    .brand-title {
-      font-size: 1.25rem;
-      font-weight: 700;
+    .header-right { display: flex; gap: 10px; align-items: center; }
+
+    .user-chip {
+      background: rgba(212,175,55,0.12);
+      border: 1px solid rgba(212,175,55,0.3);
       color: var(--gold-light);
-      letter-spacing: 0.5px;
-    }
-
-    .brand-sub {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    .header-links {
-      display: flex;
-      gap: 12px;
-    }
-
-    .btn-view-web {
-      background: linear-gradient(135deg, var(--gold), #f3e5ab);
-      color: #2b0b30;
-      font-weight: 700;
-      padding: 9px 18px;
+      padding: 6px 12px;
       border-radius: 20px;
-      text-decoration: none;
-      font-size: 0.88rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .btn-header {
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: all 0.2s;
+      text-decoration: none;
     }
+    .btn-view { background: linear-gradient(135deg, var(--gold), #f3e5ab); color: #2b0b30; border: none; }
+    .btn-logout { background: rgba(231,76,60,0.15); border: 1px solid rgba(231,76,60,0.4); color: #e74c3c; }
+    .btn-view:hover, .btn-logout:hover { transform: translateY(-1px); }
 
-    .btn-view-web:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+    /* Connection Status Bar */
+    .conn-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 24px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
+    .conn-bar.cloud { background: rgba(46,204,113,0.08); color: #2ecc71; }
+    .conn-bar.local { background: rgba(241,196,15,0.08); color: #f1c40f; }
+    .conn-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
     /* Container */
-    .container {
-      max-width: 900px;
-      margin: 30px auto;
-      padding: 0 20px;
-    }
+    .container { max-width: 920px; margin: 28px auto; padding: 0 20px; }
 
     .section-card {
-      background: var(--card-bg);
+      background: var(--card);
       border: 1px solid var(--card-border);
       border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 24px;
+      padding: 22px;
+      margin-bottom: 22px;
       box-shadow: var(--shadow);
     }
 
@@ -117,14 +212,14 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      border-bottom: 1px solid rgba(212,175,55,0.18);
       padding-bottom: 12px;
       margin-bottom: 18px;
     }
 
     .section-title {
       font-family: 'Cormorant Garamond', Georgia, serif;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 700;
       color: var(--gold-light);
       display: flex;
@@ -132,84 +227,74 @@
       gap: 10px;
     }
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .full-width { grid-column: 1/-1; }
+    .form-group-admin { margin-bottom: 14px; }
 
-    .full-width {
-      grid-column: 1 / -1;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    label {
+    label.field-label {
       display: block;
-      font-size: 0.84rem;
+      font-size: 0.83rem;
       font-weight: 600;
       color: #e3d2e1;
       margin-bottom: 6px;
     }
 
-    input[type="text"], input[type="url"], textarea, select {
+    input[type="text"], input[type="email"], input[type="url"], textarea, select {
       width: 100%;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(212, 175, 55, 0.3);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(212,175,55,0.28);
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 10px 13px;
       color: #fff;
       font-family: inherit;
       font-size: 0.9rem;
       outline: none;
-      transition: border-color 0.3s;
+      transition: border-color 0.3s, background 0.3s;
     }
 
-    input:focus, textarea:focus, select:focus {
+    input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
       border-color: var(--gold);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
     }
 
-    .hint {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-      display: block;
-    }
+    .hint { font-size: 0.71rem; color: var(--muted); margin-top: 4px; display: block; }
 
-    /* Photo Upload Box */
+    /* Photo Upload */
     .photo-upload-wrap {
       display: flex;
       align-items: center;
-      gap: 18px;
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px dashed rgba(212, 175, 55, 0.4);
+      gap: 16px;
+      background: rgba(0,0,0,0.25);
+      border: 1px dashed rgba(212,175,55,0.4);
       border-radius: 10px;
       padding: 14px;
-      margin-top: 6px;
     }
 
     .photo-preview {
-      width: 90px;
-      height: 90px;
+      width: 90px; height: 90px;
       border-radius: 8px;
       object-fit: cover;
       border: 2px solid var(--gold);
-      background: #333;
+      background: #222;
+      flex-shrink: 0;
     }
 
-    .photo-info {
-      flex: 1;
+    .photo-info { flex: 1; }
+    .upload-progress { display: none; margin-top: 8px; }
+    .progress-bar {
+      height: 4px; border-radius: 2px;
+      background: rgba(255,255,255,0.1);
+      overflow: hidden;
     }
-
-    .file-input {
-      display: none;
+    .progress-fill {
+      height: 100%; border-radius: 2px;
+      background: linear-gradient(90deg, var(--rose), var(--gold));
+      transition: width 0.3s;
+      width: 0%;
     }
 
     .btn-upload {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255,255,255,0.1);
       border: 1px solid var(--gold);
       color: #fff;
       padding: 7px 16px;
@@ -222,50 +307,39 @@
       gap: 6px;
       transition: all 0.2s;
     }
+    .btn-upload:hover { background: var(--gold); color: #2b0b30; }
 
-    .btn-upload:hover {
-      background: var(--gold);
-      color: #2b0b30;
-    }
+    .file-input { display: none; }
 
-    /* Reasons Mini Grid */
-    .reasons-admin-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
+    /* Reasons Grid */
+    .reasons-admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .reason-item-box {
-      background: rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(212, 175, 55, 0.2);
+      background: rgba(0,0,0,0.2);
+      border: 1px solid rgba(212,175,55,0.18);
       border-radius: 8px;
       padding: 12px;
     }
 
-    /* Sticky Bottom Action Bar */
+    /* Sticky Save Bar */
     .sticky-bar {
       position: fixed;
-      bottom: 0;
-      left: 0;
+      bottom: 0; left: 0;
       width: 100%;
-      background: rgba(18, 5, 22, 0.92);
-      backdrop-filter: blur(14px);
+      background: rgba(18,5,22,0.94);
+      backdrop-filter: blur(16px);
       border-top: 1px solid var(--card-border);
-      padding: 14px 28px;
+      padding: 14px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       z-index: 100;
-      box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 -5px 25px rgba(0,0,0,0.6);
     }
 
-    .status-text {
-      font-size: 0.85rem;
-      color: var(--gold-light);
-    }
+    .save-status { font-size: 0.84rem; color: var(--gold-light); }
 
     .btn-save-all {
-      background: linear-gradient(135deg, #e84393 0%, #ff7675 100%);
+      background: linear-gradient(135deg, #e84393 0%, #a855f7 100%);
       border: none;
       color: #fff;
       font-weight: 700;
@@ -276,490 +350,728 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 4px 15px rgba(232, 67, 147, 0.4);
+      box-shadow: 0 4px 15px rgba(232,67,147,0.4);
       transition: transform 0.2s, box-shadow 0.2s;
     }
+    .btn-save-all:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(232,67,147,0.6); }
+    .btn-save-all:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    .btn-save-all:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(232, 67, 147, 0.6);
-    }
-
-    /* Toast Notification */
+    /* Toast */
     .toast {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #27ae60;
-      color: #fff;
+      top: 20px; right: 20px;
       padding: 12px 22px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 600;
-      font-size: 0.9rem;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-      transform: translateY(-50px);
+      font-size: 0.88rem;
+      transform: translateY(-80px);
       opacity: 0;
-      transition: all 0.3s ease;
-      z-index: 9999;
+      transition: all 0.4s cubic-bezier(0.2,0.8,0.3,1);
+      z-index: 99999;
+      max-width: 320px;
     }
-
-    .toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: #1a4a2e; border: 1px solid #2ecc71; color: #2ecc71; }
+    .toast.error { background: #4a1a1a; border: 1px solid #e74c3c; color: #e74c3c; }
 
     @media (max-width: 768px) {
-      .form-grid, .reasons-admin-grid {
-        grid-template-columns: 1fr;
-      }
-      .admin-header {
-        padding: 12px 16px;
-      }
-      .brand-title {
-        font-size: 1.1rem;
-      }
+      .form-grid, .reasons-admin-grid { grid-template-columns: 1fr; }
+      .admin-header { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
+      .brand-title { font-size: 1rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Admin Header -->
-  <header class="admin-header">
-    <div class="brand">
-      <span class="brand-icon">⚙️</span>
-      <div>
-        <h1 class="brand-title">Storybook CMS Dashboard</h1>
-        <p class="brand-sub">Kustomisasi Teks, Narasi, Foto, dan Musik</p>
-      </div>
-    </div>
-    <div class="header-links">
-      <a href="/" target="_blank" class="btn-view-web">
-        <span>👁️ Lihat Web Storybook</span>
-      </a>
-    </div>
-  </header>
+  <!-- ===========================
+       LOGIN OVERLAY
+  =========================== -->
+  <div id="loginOverlay">
+    <div class="login-box">
+      <div class="login-icon">🔐</div>
+      <h1 class="login-title">Admin CMS</h1>
+      <p class="login-sub">Storybook Ulang Tahun · Panel Kontrol</p>
 
-  <main class="container">
+      <div class="status-badge local" id="connectionBadge">
+        <span>●</span> <span id="connectionText">Memeriksa koneksi...</span>
+      </div>
 
-    <!-- ================= 1. PENGATURAN MUSIK ================= -->
-    <div class="section-card">
-      <div class="section-head">
-        <h2 class="section-title">🎵 Musik Latar Romantis</h2>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Pilih Lagu yang Tersedia:</label>
-          <select id="selectMusic">
-            <option value="assets/music/Jaz - Bersamamu (Official Lyric Video).mp3">Jaz - Bersamamu (Default)</option>
-          </select>
-          <small class="hint">Lagu yang ada di folder assets/music/</small>
-        </div>
-        <div class="form-group">
-          <label>Unggah Lagu Sendiri (.mp3):</label>
-          <input type="file" id="uploadMusicFile" accept="audio/*">
-          <small class="hint">Unggah file lagu baru langsung ke folder assets/music/</small>
-        </div>
-        <div class="full-width">
-          <audio id="adminAudioPreview" controls style="width: 100%; margin-top: 8px;"></audio>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= 2. HALAMAN SAMPUL (COVER) ================= -->
-    <div class="section-card">
-      <div class="section-head">
-        <h2 class="section-title">📖 Halaman Sampul (Cover)</h2>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Tagline / Ucapan Pembuka:</label>
-          <input type="text" id="coverTagline">
-        </div>
-        <div class="form-group">
-          <label>Nama Pasangan / Penerima:</label>
-          <input type="text" id="coverRecipientName">
-        </div>
-        <div class="form-group full-width">
-          <label>Kutipan Romantis Sampul:</label>
-          <textarea id="coverSubtext" rows="2"></textarea>
-        </div>
-        <div class="form-group full-width">
-          <label>Foto Sampul (Cover Image):</label>
-          <div class="photo-upload-wrap">
-            <img src="assets/cover.jpg" id="previewCoverImg" class="photo-preview" alt="Cover Preview">
-            <div class="photo-info">
-              <input type="file" id="fileCover" class="file-input" accept="image/*">
-              <button type="button" class="btn-upload" onclick="document.getElementById('fileCover').click()">
-                📷 Ganti Foto Sampul
-              </button>
-              <small class="hint" id="statusCoverImg">File: assets/cover.jpg</small>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= 3. BAB 1: PROLOGUE & POLAROID 1 ================= -->
-    <div class="section-card">
-      <div class="section-head">
-        <h2 class="section-title">✨ Bab 1: Momen Hangat (Halaman 1 & 2)</h2>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Judul Prologue:</label>
-          <input type="text" id="prologueTitle">
-        </div>
-        <div class="form-group">
-          <label>Judul Bab 1:</label>
-          <input type="text" id="chapter1Title">
-        </div>
-        <div class="form-group full-width">
-          <label>Paragraf Pembuka:</label>
-          <textarea id="prologueP1" rows="3"></textarea>
-        </div>
-        <div class="form-group full-width">
-          <label>Kutipan Indah (Quote Box):</label>
-          <textarea id="prologueQuote" rows="2"></textarea>
-        </div>
-        <div class="form-group full-width">
-          <label>Foto Polaroid 1:</label>
-          <div class="photo-upload-wrap">
-            <img src="assets/memory1.jpg" id="previewMemory1Img" class="photo-preview" alt="Memory 1 Preview">
-            <div class="photo-info">
-              <input type="file" id="fileMemory1" class="file-input" accept="image/*">
-              <button type="button" class="btn-upload" onclick="document.getElementById('fileMemory1').click()">
-                📷 Ganti Foto Polaroid 1
-              </button>
-              <small class="hint" id="statusMemory1Img">File: assets/memory1.jpg</small>
-            </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Caption Foto Polaroid 1:</label>
-          <input type="text" id="memory1Caption">
-        </div>
-        <div class="form-group">
-          <label>Tanggal / Label Polaroid 1:</label>
-          <input type="text" id="memory1Date">
-        </div>
-        <div class="form-group full-width">
-          <label>Catatan Kisah Bab 1:</label>
-          <textarea id="memory1Text" rows="3"></textarea>
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= 4. BAB 2: ALASAN MENCINTAIMU ================= -->
-    <div class="section-card">
-      <div class="section-head">
-        <h2 class="section-title">💖 Bab 2: 4 Alasan Mencintaimu (Halaman 3)</h2>
+      <div class="form-group">
+        <label>Email Admin:</label>
+        <input type="email" id="loginEmail" placeholder="admin@email.com" autocomplete="email">
       </div>
       <div class="form-group">
-        <label>Judul Bab 2:</label>
-        <input type="text" id="chapter2Title">
+        <label>Password:</label>
+        <input type="password" id="loginPassword" placeholder="Password kamu" autocomplete="current-password">
       </div>
-      <div class="reasons-admin-grid">
-        <div class="reason-item-box">
-          <label>Alasan 1:</label>
-          <input type="text" id="reasonTitle0" style="margin-bottom: 6px;">
-          <textarea id="reasonDesc0" rows="2"></textarea>
-        </div>
-        <div class="reason-item-box">
-          <label>Alasan 2:</label>
-          <input type="text" id="reasonTitle1" style="margin-bottom: 6px;">
-          <textarea id="reasonDesc1" rows="2"></textarea>
-        </div>
-        <div class="reason-item-box">
-          <label>Alasan 3:</label>
-          <input type="text" id="reasonTitle2" style="margin-bottom: 6px;">
-          <textarea id="reasonDesc2" rows="2"></textarea>
-        </div>
-        <div class="reason-item-box">
-          <label>Alasan 4:</label>
-          <input type="text" id="reasonTitle3" style="margin-bottom: 6px;">
-          <textarea id="reasonDesc3" rows="2"></textarea>
+
+      <button class="btn-login" id="btnLogin" onclick="doLogin()">
+        <span>✨</span> <span>Masuk ke Dashboard</span>
+      </button>
+
+      <div class="login-error" id="loginError"></div>
+    </div>
+  </div>
+
+  <!-- ===========================
+       MAIN ADMIN APP
+  =========================== -->
+  <div id="adminApp">
+
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="brand">
+        <span class="brand-icon">💖</span>
+        <div>
+          <div class="brand-title">Storybook CMS Dashboard</div>
+          <div class="brand-sub">Kustomisasi Teks, Foto & Musik</div>
         </div>
       </div>
+      <div class="header-right">
+        <div class="user-chip" id="userChip">👤 Admin</div>
+        <a href="/" target="_blank" class="btn-header btn-view">👁️ Lihat Web</a>
+        <button class="btn-header btn-logout" onclick="doLogout()">🚪 Logout</button>
+      </div>
+    </header>
+
+    <!-- Connection bar -->
+    <div class="conn-bar local" id="connBar">
+      <span class="conn-dot"></span>
+      <span id="connBarText">Mode Lokal</span>
     </div>
 
-    <!-- ================= 5. BAB 3: POLAROID 2 (LANGKAH SENJA) ================= -->
-    <div class="section-card">
-      <div class="section-head">
-        <h2 class="section-title">🌅 Bab 3: Langkah Bersama (Halaman 4)</h2>
-      </div>
-      <div class="form-grid">
-        <div class="form-group full-width">
-          <label>Judul Bab 3:</label>
-          <input type="text" id="chapter3Title">
+    <!-- Content -->
+    <main class="container">
+
+      <!-- ===== MUSIK ===== -->
+      <div class="section-card">
+        <div class="section-head">
+          <h2 class="section-title">🎵 Musik Latar Romantis</h2>
         </div>
-        <div class="form-group full-width">
-          <label>Foto Polaroid 2:</label>
-          <div class="photo-upload-wrap">
-            <img src="assets/memory2.jpg" id="previewMemory2Img" class="photo-preview" alt="Memory 2 Preview">
-            <div class="photo-info">
-              <input type="file" id="fileMemory2" class="file-input" accept="image/*">
-              <button type="button" class="btn-upload" onclick="document.getElementById('fileMemory2').click()">
-                📷 Ganti Foto Polaroid 2
-              </button>
-              <small class="hint" id="statusMemory2Img">File: assets/memory2.jpg</small>
+        <div class="form-grid">
+          <div class="form-group-admin">
+            <label class="field-label">Pilih Lagu yang Tersedia:</label>
+            <select id="selectMusic">
+              <option value="">— Memuat daftar lagu... —</option>
+            </select>
+            <small class="hint">Lagu yang sudah diunggah ke Supabase Storage atau folder lokal</small>
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Upload Lagu Baru (.mp3):</label>
+            <input type="file" id="uploadMusicFile" class="file-input" accept="audio/*">
+            <button type="button" class="btn-upload" onclick="document.getElementById('uploadMusicFile').click()">
+              🎵 Pilih File Audio
+            </button>
+            <div class="upload-progress" id="progressMusic">
+              <div class="progress-bar"><div class="progress-fill" id="fillMusic"></div></div>
+              <small class="hint" id="statusMusic">Memproses...</small>
+            </div>
+          </div>
+          <div class="full-width">
+            <audio id="adminAudioPreview" controls style="width:100%; margin-top: 8px;"></audio>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SAMPUL ===== -->
+      <div class="section-card">
+        <div class="section-head">
+          <h2 class="section-title">📖 Halaman Sampul (Cover)</h2>
+        </div>
+        <div class="form-grid">
+          <div class="form-group-admin">
+            <label class="field-label">Tagline / Ucapan Pembuka:</label>
+            <input type="text" id="coverTagline">
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Nama Penerima / Pasangan:</label>
+            <input type="text" id="coverRecipientName">
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Kutipan Romantis Sampul:</label>
+            <textarea id="coverSubtext" rows="2"></textarea>
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Foto Sampul (Cover Image):</label>
+            <div class="photo-upload-wrap">
+              <img id="previewCoverImg" class="photo-preview" src="assets/cover.jpg" alt="Cover Preview">
+              <div class="photo-info">
+                <input type="file" id="fileCover" class="file-input" accept="image/*">
+                <button type="button" class="btn-upload" onclick="document.getElementById('fileCover').click()">
+                  📷 Ganti Foto Sampul
+                </button>
+                <div class="upload-progress" id="progressCover">
+                  <div class="progress-bar"><div class="progress-fill" id="fillCover"></div></div>
+                </div>
+                <small class="hint" id="statusCoverImg">Foto cover utama storybook</small>
+              </div>
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <label>Caption Foto Polaroid 2:</label>
-          <input type="text" id="memory2Caption">
+      </div>
+
+      <!-- ===== BAB 1 ===== -->
+      <div class="section-card">
+        <div class="section-head">
+          <h2 class="section-title">✨ Bab 1: Momen Hangat (Halaman 1 & 2)</h2>
         </div>
-        <div class="form-group">
-          <label>Tanggal / Label Polaroid 2:</label>
-          <input type="text" id="memory2Date">
-        </div>
-        <div class="form-group full-width">
-          <label>Teks Romantis Senja:</label>
-          <textarea id="memory2Text" rows="3"></textarea>
+        <div class="form-grid">
+          <div class="form-group-admin">
+            <label class="field-label">Judul Prologue:</label>
+            <input type="text" id="prologueTitle">
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Judul Bab 1:</label>
+            <input type="text" id="chapter1Title">
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Paragraf Pembuka:</label>
+            <textarea id="prologueP1" rows="3"></textarea>
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Kutipan Indah (Quote Box):</label>
+            <textarea id="prologueQuote" rows="2"></textarea>
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Foto Polaroid 1:</label>
+            <div class="photo-upload-wrap">
+              <img id="previewMemory1Img" class="photo-preview" src="assets/memory1.jpg" alt="Memory 1">
+              <div class="photo-info">
+                <input type="file" id="fileMemory1" class="file-input" accept="image/*">
+                <button type="button" class="btn-upload" onclick="document.getElementById('fileMemory1').click()">
+                  📷 Ganti Foto Polaroid 1
+                </button>
+                <div class="upload-progress" id="progressMemory1">
+                  <div class="progress-bar"><div class="progress-fill" id="fillMemory1"></div></div>
+                </div>
+                <small class="hint" id="statusMemory1Img">Foto kenangan pertama</small>
+              </div>
+            </div>
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Caption Foto Polaroid 1:</label>
+            <input type="text" id="memory1Caption">
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Tanggal / Label Polaroid 1:</label>
+            <input type="text" id="memory1Date">
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Catatan Kisah Bab 1:</label>
+            <textarea id="memory1Text" rows="3"></textarea>
+          </div>
         </div>
       </div>
+
+      <!-- ===== BAB 2 ===== -->
+      <div class="section-card">
+        <div class="section-head">
+          <h2 class="section-title">💖 Bab 2: 4 Alasan Mencintaimu (Halaman 3)</h2>
+        </div>
+        <div class="form-group-admin" style="margin-bottom:16px;">
+          <label class="field-label">Judul Bab 2:</label>
+          <input type="text" id="chapter2Title">
+        </div>
+        <div class="reasons-admin-grid">
+          <div class="reason-item-box">
+            <label class="field-label">Alasan 1 — Judul:</label>
+            <input type="text" id="reasonTitle0" style="margin-bottom:8px;">
+            <label class="field-label">Deskripsi:</label>
+            <textarea id="reasonDesc0" rows="2"></textarea>
+          </div>
+          <div class="reason-item-box">
+            <label class="field-label">Alasan 2 — Judul:</label>
+            <input type="text" id="reasonTitle1" style="margin-bottom:8px;">
+            <label class="field-label">Deskripsi:</label>
+            <textarea id="reasonDesc1" rows="2"></textarea>
+          </div>
+          <div class="reason-item-box">
+            <label class="field-label">Alasan 3 — Judul:</label>
+            <input type="text" id="reasonTitle2" style="margin-bottom:8px;">
+            <label class="field-label">Deskripsi:</label>
+            <textarea id="reasonDesc2" rows="2"></textarea>
+          </div>
+          <div class="reason-item-box">
+            <label class="field-label">Alasan 4 — Judul:</label>
+            <input type="text" id="reasonTitle3" style="margin-bottom:8px;">
+            <label class="field-label">Deskripsi:</label>
+            <textarea id="reasonDesc3" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BAB 3 ===== -->
+      <div class="section-card">
+        <div class="section-head">
+          <h2 class="section-title">🌅 Bab 3: Langkah Bersama (Halaman 4)</h2>
+        </div>
+        <div class="form-grid">
+          <div class="form-group-admin full-width">
+            <label class="field-label">Judul Bab 3:</label>
+            <input type="text" id="chapter3Title">
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Foto Polaroid 2:</label>
+            <div class="photo-upload-wrap">
+              <img id="previewMemory2Img" class="photo-preview" src="assets/memory2.jpg" alt="Memory 2">
+              <div class="photo-info">
+                <input type="file" id="fileMemory2" class="file-input" accept="image/*">
+                <button type="button" class="btn-upload" onclick="document.getElementById('fileMemory2').click()">
+                  📷 Ganti Foto Polaroid 2
+                </button>
+                <div class="upload-progress" id="progressMemory2">
+                  <div class="progress-bar"><div class="progress-fill" id="fillMemory2"></div></div>
+                </div>
+                <small class="hint" id="statusMemory2Img">Foto kenangan kedua</small>
+              </div>
+            </div>
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Caption Foto Polaroid 2:</label>
+            <input type="text" id="memory2Caption">
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Tanggal / Label Polaroid 2:</label>
+            <input type="text" id="memory2Date">
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Teks Romantis Senja:</label>
+            <textarea id="memory2Text" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BAB 4 ===== -->
+      <div class="section-card">
+        <div class="section-head">
+          <h2 class="section-title">🎂 Bab 4: Tiup Lilin & Surat Cinta (Halaman 5 & 6)</h2>
+        </div>
+        <div class="form-grid">
+          <div class="form-group-admin">
+            <label class="field-label">Judul Halaman Kue Ulang Tahun:</label>
+            <input type="text" id="cakeTitle">
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Pesan Doa Setelah Lilin Ditiup:</label>
+            <input type="text" id="wishMessage">
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Tanggal Surat Cinta:</label>
+            <input type="text" id="letterDate">
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Kepada (Penerima Surat):</label>
+            <input type="text" id="letterRecipient">
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Isi Surat Cinta Spesial:</label>
+            <textarea id="letterContent" rows="5"></textarea>
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Tanda Tangan Pengirim (Nama Kamu):</label>
+            <input type="text" id="letterSender">
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== BAB 5 ===== -->
+      <div class="section-card">
+        <div class="section-head">
+          <h2 class="section-title">🎁 Bab 5: Kado & Penutup (Halaman 7 & 8)</h2>
+        </div>
+        <div class="form-grid">
+          <div class="form-group-admin full-width">
+            <label class="field-label">Pesan Rahasia Saat Kado Dibuka:</label>
+            <textarea id="giftSecretMessage" rows="2"></textarea>
+          </div>
+          <div class="form-group-admin">
+            <label class="field-label">Judul Halaman Penutup:</label>
+            <input type="text" id="endingTitle">
+          </div>
+          <div class="form-group-admin full-width">
+            <label class="field-label">Kutipan Cinta Abadi Penutup:</label>
+            <textarea id="endingQuote" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Sticky Save Bar -->
+    <div class="sticky-bar">
+      <div class="save-status" id="saveStatus">Semua perubahan siap disimpan 💾</div>
+      <button class="btn-save-all" id="btnSaveAll" onclick="saveAll()">
+        <span>💾</span> <span>Simpan Semua Perubahan</span>
+      </button>
     </div>
 
-    <!-- ================= 6. BAB 4: TIUP LILIN & SURAT CINTA ================= -->
-    <div class="section-card">
-      <div class="section-head">
-        <h2 class="section-title">🎂 Bab 4: Momen Tiup Lilin & Surat Cinta (Halaman 5 & 6)</h2>
-      </div>
-      <div class="form-grid">
-        <div class="form-group">
-          <label>Judul Halaman Kue:</label>
-          <input type="text" id="cakeTitle">
-        </div>
-        <div class="form-group">
-          <label>Pesan Doa Setelah Lilin Ditiup:</label>
-          <input type="text" id="wishMessage">
-        </div>
-        <div class="form-group">
-          <label>Tanggal Surat:</label>
-          <input type="text" id="letterDate">
-        </div>
-        <div class="form-group">
-          <label>Kepada (Penerima):</label>
-          <input type="text" id="letterRecipient">
-        </div>
-        <div class="form-group full-width">
-          <label>Isi Surat Cinta Spesial:</label>
-          <textarea id="letterContent" rows="4"></textarea>
-        </div>
-        <div class="form-group full-width">
-          <label>Tanda Tangan Pengirim (Nama Anda):</label>
-          <input type="text" id="letterSender">
-        </div>
-      </div>
-    </div>
-
-    <!-- ================= 7. BAB 5: KADO & PENUTUP ================= -->
-    <div class="section-card">
-      <div class="section-head">
-        <h2 class="section-title">🎁 Bab 5: Kado Kejutan & Penutup (Halaman 7 & Sampul Belakang)</h2>
-      </div>
-      <div class="form-grid">
-        <div class="form-group full-width">
-          <label>Pesan Rahasia Saat Kado Dibuka:</label>
-          <textarea id="giftSecretMessage" rows="2"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Judul Sampul Belakang:</label>
-          <input type="text" id="endingTitle">
-        </div>
-        <div class="form-group full-width">
-          <label>Kutipan Cinta Abadi Penutup:</label>
-          <textarea id="endingQuote" rows="2"></textarea>
-        </div>
-      </div>
-    </div>
-
-  </main>
-
-  <!-- Sticky Bottom Save Bar -->
-  <div class="sticky-bar">
-    <div class="status-text" id="saveStatus">Semua perubahan siap disimpan.</div>
-    <button type="button" class="btn-save-all" id="btnSaveAll">
-      <span>💾 Simpan Semua Perubahan</span>
-    </button>
   </div>
 
-  <div class="toast" id="toast">✅ Perubahan berhasil disimpan!</div>
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
 
   <script>
+    // ============================================================
+    // CONFIG — Otomatis dibaca dari /api/status
+    // ============================================================
+    let SUPABASE_URL = '';
+    let SUPABASE_ANON_KEY = '';
+    let supabaseClient = null;
+    let authToken = localStorage.getItem('sb_token') || null;
     let currentData = {};
+    let isSupabase = false;
 
-    // Fetch and populate content
-    async function loadContent() {
+    // ============================================================
+    // INIT — Cek status server + koneksi Supabase
+    // ============================================================
+    async function init() {
       try {
-        const res = await fetch('/api/content');
-        currentData = await res.json();
+        const res = await fetch('/api/status');
+        const status = await res.json();
+        isSupabase = status.supabase;
 
-        // Music
-        if (currentData.music) {
-          const select = document.getElementById('selectMusic');
-          select.value = currentData.music.src;
-          document.getElementById('adminAudioPreview').src = currentData.music.src;
+        const badge = document.getElementById('connectionBadge');
+        const badgeText = document.getElementById('connectionText');
+        const connBar = document.getElementById('connBar');
+        const connBarText = document.getElementById('connBarText');
+
+        if (isSupabase) {
+          badge.className = 'status-badge cloud';
+          badgeText.textContent = 'Terhubung ke Supabase Cloud ✓';
+          connBar.className = 'conn-bar cloud';
+          connBarText.textContent = '🌐 Mode Supabase Cloud — Data tersimpan secara permanen';
+        } else {
+          badge.className = 'status-badge local';
+          badgeText.textContent = 'Mode Lokal (isi .env dulu)';
+          connBar.className = 'conn-bar local';
+          connBarText.textContent = '💻 Mode Lokal — Data tersimpan di content.json (Supabase belum dikonfigurasi)';
         }
 
-        // Cover
-        document.getElementById('coverTagline').value = currentData.cover.tagline || '';
-        document.getElementById('coverRecipientName').value = currentData.cover.recipientName || '';
-        document.getElementById('coverSubtext').value = currentData.cover.subtext || '';
-        if (currentData.cover.photo) {
-          document.getElementById('previewCoverImg').src = currentData.cover.photo;
+        // Jika sudah ada token tersimpan, coba auto-login
+        if (authToken) {
+          await autoLogin();
         }
-
-        // Spread 1
-        document.getElementById('prologueTitle').value = currentData.spread1.prologueTitle || '';
-        document.getElementById('chapter1Title').value = currentData.spread1.chapter1Title || '';
-        document.getElementById('prologueP1').value = currentData.spread1.prologueP1 || '';
-        document.getElementById('prologueQuote').value = currentData.spread1.prologueQuote || '';
-        if (currentData.spread1.memory1Photo) {
-          document.getElementById('previewMemory1Img').src = currentData.spread1.memory1Photo;
-        }
-        document.getElementById('memory1Caption').value = currentData.spread1.memory1Caption || '';
-        document.getElementById('memory1Date').value = currentData.spread1.memory1Date || '';
-        document.getElementById('memory1Text').value = currentData.spread1.memory1Text || '';
-
-        // Spread 2
-        document.getElementById('chapter2Title').value = currentData.spread2.chapter2Title || '';
-        if (currentData.spread2.reasons) {
-          currentData.spread2.reasons.forEach((r, idx) => {
-            if (document.getElementById(`reasonTitle${idx}`)) {
-              document.getElementById(`reasonTitle${idx}`).value = r.title || '';
-              document.getElementById(`reasonDesc${idx}`).value = r.desc || '';
-            }
-          });
-        }
-
-        // Spread 3
-        document.getElementById('chapter3Title').value = currentData.spread2.chapter3Title || '';
-        if (currentData.spread2.memory2Photo) {
-          document.getElementById('previewMemory2Img').src = currentData.spread2.memory2Photo;
-        }
-        document.getElementById('memory2Caption').value = currentData.spread2.memory2Caption || '';
-        document.getElementById('memory2Date').value = currentData.spread2.memory2Date || '';
-        document.getElementById('memory2Text').value = currentData.spread2.memory2Text || '';
-
-        // Spread 4 (Cake & Letter)
-        document.getElementById('cakeTitle').value = currentData.spread3.cakeTitle || '';
-        document.getElementById('wishMessage').value = currentData.spread3.wishMessage || '';
-        document.getElementById('letterDate').value = currentData.spread3.letterDate || '';
-        document.getElementById('letterRecipient').value = currentData.spread3.letterRecipient || '';
-        document.getElementById('letterContent').value = currentData.spread3.letterContent || '';
-        document.getElementById('letterSender').value = currentData.spread3.letterSender || '';
-
-        // Spread 5 (Gift & Ending)
-        document.getElementById('giftSecretMessage').value = currentData.spread4.giftSecretMessage || '';
-        document.getElementById('endingTitle').value = currentData.spread4.endingTitle || '';
-        document.getElementById('endingQuote').value = currentData.spread4.endingQuote || '';
-
-        loadMusicList();
-      } catch (err) {
-        console.error('Error loading content:', err);
+      } catch (e) {
+        console.error('Init error:', e);
       }
     }
 
-    // Load available music in assets/music
+    // ============================================================
+    // AUTO LOGIN — Coba pakai token yang tersimpan
+    // ============================================================
+    async function autoLogin() {
+      try {
+        const res = await fetch('/api/content', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        if (res.ok) {
+          showApp();
+          loadContent();
+        } else {
+          authToken = null;
+          localStorage.removeItem('sb_token');
+        }
+      } catch (e) {
+        authToken = null;
+      }
+    }
+
+    // ============================================================
+    // LOGIN
+    // ============================================================
+    async function doLogin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn = document.getElementById('btnLogin');
+      const errEl = document.getElementById('loginError');
+
+      if (!email || !password) {
+        errEl.textContent = 'Email dan password wajib diisi!';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> <span>Memverifikasi...</span>';
+      errEl.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Login gagal');
+        }
+
+        authToken = data.token;
+        localStorage.setItem('sb_token', authToken);
+
+        const userChip = document.getElementById('userChip');
+        userChip.textContent = '👤 ' + (data.user?.email || email);
+
+        showApp();
+        await loadContent();
+        showToast('✅ Login berhasil! Selamat datang di Admin Panel.', 'success');
+      } catch (err) {
+        errEl.textContent = '❌ ' + err.message;
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>✨</span> <span>Masuk ke Dashboard</span>';
+      }
+    }
+
+    // Handle Enter key on password
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && document.getElementById('loginOverlay').style.display !== 'none') {
+        doLogin();
+      }
+    });
+
+    // ============================================================
+    // LOGOUT
+    // ============================================================
+    async function doLogout() {
+      try {
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+      } catch (e) {}
+
+      authToken = null;
+      localStorage.removeItem('sb_token');
+      document.getElementById('loginOverlay').style.display = 'flex';
+      document.getElementById('adminApp').style.display = 'none';
+      showToast('👋 Logout berhasil.', 'success');
+    }
+
+    function showApp() {
+      document.getElementById('loginOverlay').style.display = 'none';
+      document.getElementById('adminApp').style.display = 'block';
+    }
+
+    // ============================================================
+    // LOAD CONTENT
+    // ============================================================
+    async function loadContent() {
+      try {
+        const res = await fetch('/api/content', {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        currentData = await res.json();
+        populateForm(currentData);
+        await loadMusicList();
+      } catch (err) {
+        showToast('❌ Gagal memuat konten: ' + err.message, 'error');
+      }
+    }
+
+    function populateForm(d) {
+      // Music
+      if (d.music?.src) {
+        document.getElementById('adminAudioPreview').src = d.music.src;
+      }
+
+      // Cover
+      setValue('coverTagline', d.cover?.tagline);
+      setValue('coverRecipientName', d.cover?.recipientName);
+      setValue('coverSubtext', d.cover?.subtext);
+      if (d.cover?.photo) document.getElementById('previewCoverImg').src = d.cover.photo;
+
+      // Spread 1
+      setValue('prologueTitle', d.spread1?.prologueTitle);
+      setValue('chapter1Title', d.spread1?.chapter1Title);
+      setValue('prologueP1', d.spread1?.prologueP1);
+      setValue('prologueQuote', d.spread1?.prologueQuote);
+      setValue('memory1Caption', d.spread1?.memory1Caption);
+      setValue('memory1Date', d.spread1?.memory1Date);
+      setValue('memory1Text', d.spread1?.memory1Text);
+      if (d.spread1?.memory1Photo) document.getElementById('previewMemory1Img').src = d.spread1.memory1Photo;
+
+      // Spread 2
+      setValue('chapter2Title', d.spread2?.chapter2Title);
+      if (d.spread2?.reasons) {
+        d.spread2.reasons.forEach((r, i) => {
+          setValue(`reasonTitle${i}`, r.title);
+          setValue(`reasonDesc${i}`, r.desc);
+        });
+      }
+      setValue('chapter3Title', d.spread2?.chapter3Title);
+      setValue('memory2Caption', d.spread2?.memory2Caption);
+      setValue('memory2Date', d.spread2?.memory2Date);
+      setValue('memory2Text', d.spread2?.memory2Text);
+      if (d.spread2?.memory2Photo) document.getElementById('previewMemory2Img').src = d.spread2.memory2Photo;
+
+      // Spread 3
+      setValue('cakeTitle', d.spread3?.cakeTitle);
+      setValue('wishMessage', d.spread3?.wishMessage);
+      setValue('letterDate', d.spread3?.letterDate);
+      setValue('letterRecipient', d.spread3?.letterRecipient);
+      setValue('letterContent', d.spread3?.letterContent);
+      setValue('letterSender', d.spread3?.letterSender);
+
+      // Spread 4
+      setValue('giftSecretMessage', d.spread4?.giftSecretMessage);
+      setValue('endingTitle', d.spread4?.endingTitle);
+      setValue('endingQuote', d.spread4?.endingQuote);
+    }
+
+    function setValue(id, val) {
+      const el = document.getElementById(id);
+      if (el && val !== undefined && val !== null) el.value = val;
+    }
+
+    // ============================================================
+    // MUSIC LIST
+    // ============================================================
     async function loadMusicList() {
       try {
         const res = await fetch('/api/music-list');
         const list = await res.json();
-        const select = document.getElementById('selectMusic');
-        select.innerHTML = '';
+        const sel = document.getElementById('selectMusic');
+        sel.innerHTML = '<option value="">— Pilih lagu —</option>';
         list.forEach(m => {
           const opt = document.createElement('option');
-          opt.value = m.path;
+          opt.value = m.publicUrl || m.path;
           opt.textContent = m.name;
-          select.appendChild(opt);
+          sel.appendChild(opt);
         });
-        if (currentData.music && currentData.music.src) {
-          select.value = currentData.music.src;
-        }
+        if (currentData.music?.src) sel.value = currentData.music.src;
       } catch (e) {}
     }
 
-    document.getElementById('selectMusic').addEventListener('change', (e) => {
-      document.getElementById('adminAudioPreview').src = e.target.value;
+    document.getElementById('selectMusic').addEventListener('change', e => {
+      const src = e.target.value;
+      if (src) document.getElementById('adminAudioPreview').src = src;
     });
 
-    // Upload Handler
-    async function uploadFile(fileInput, targetKey, previewEl, statusEl) {
-      const file = fileInput.files[0];
-      if (!file) return;
+    // ============================================================
+    // UPLOAD FILE (foto / audio) ke Supabase Storage
+    // ============================================================
+    async function uploadFile({ file, progressBarId, fillId, statusId, previewId, onSuccess }) {
+      const progressWrap = document.getElementById(progressBarId);
+      const fill = document.getElementById(fillId);
+      const status = document.getElementById(statusId);
+
+      progressWrap.style.display = 'block';
+      fill.style.width = '10%';
+      if (status) status.textContent = 'Mengunggah...';
 
       const formData = new FormData();
       formData.append('file', file);
 
-      statusEl.textContent = 'Mengunggah...';
-
       try {
+        // Simulate progress
+        let prog = 10;
+        const progInterval = setInterval(() => {
+          prog = Math.min(prog + 10, 85);
+          fill.style.width = prog + '%';
+        }, 200);
+
         const res = await fetch('/api/upload', {
           method: 'POST',
+          headers: { 'Authorization': `Bearer ${authToken}` },
           body: formData
         });
-        const data = await res.json();
-        if (data.success) {
-          previewEl.src = data.filePath + '?t=' + Date.now();
-          statusEl.textContent = 'Tersimpan: ' + data.filePath;
-          showToast('Foto berhasil diunggah!');
 
-          // Update currentData state
-          if (targetKey === 'cover') currentData.cover.photo = data.filePath;
-          if (targetKey === 'memory1') currentData.spread1.memory1Photo = data.filePath;
-          if (targetKey === 'memory2') currentData.spread2.memory2Photo = data.filePath;
-        } else {
-          statusEl.textContent = 'Gagal: ' + data.error;
+        clearInterval(progInterval);
+        fill.style.width = '100%';
+
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || 'Upload gagal');
+
+        const url = data.publicUrl || data.filePath;
+
+        if (previewId) {
+          document.getElementById(previewId).src = url + '?t=' + Date.now();
         }
+        if (status) status.textContent = '✅ Berhasil diunggah';
+
+        onSuccess(url);
+        showToast('✅ File berhasil diunggah!', 'success');
+
+        setTimeout(() => { progressWrap.style.display = 'none'; fill.style.width = '0%'; }, 2000);
       } catch (err) {
-        statusEl.textContent = 'Error: ' + err.message;
+        fill.style.width = '0%';
+        if (status) status.textContent = '❌ Gagal: ' + err.message;
+        showToast('❌ Upload gagal: ' + err.message, 'error');
       }
     }
 
-    // File input listeners
+    // Cover photo
     document.getElementById('fileCover').addEventListener('change', function() {
-      uploadFile(this, 'cover', document.getElementById('previewCoverImg'), document.getElementById('statusCoverImg'));
+      uploadFile({
+        file: this.files[0],
+        progressBarId: 'progressCover', fillId: 'fillCover', statusId: 'statusCoverImg',
+        previewId: 'previewCoverImg',
+        onSuccess: url => { if (!currentData.cover) currentData.cover = {}; currentData.cover.photo = url; }
+      });
     });
+
+    // Memory 1
     document.getElementById('fileMemory1').addEventListener('change', function() {
-      uploadFile(this, 'memory1', document.getElementById('previewMemory1Img'), document.getElementById('statusMemory1Img'));
+      uploadFile({
+        file: this.files[0],
+        progressBarId: 'progressMemory1', fillId: 'fillMemory1', statusId: 'statusMemory1Img',
+        previewId: 'previewMemory1Img',
+        onSuccess: url => { if (!currentData.spread1) currentData.spread1 = {}; currentData.spread1.memory1Photo = url; }
+      });
     });
+
+    // Memory 2
     document.getElementById('fileMemory2').addEventListener('change', function() {
-      uploadFile(this, 'memory2', document.getElementById('previewMemory2Img'), document.getElementById('statusMemory2Img'));
+      uploadFile({
+        file: this.files[0],
+        progressBarId: 'progressMemory2', fillId: 'fillMemory2', statusId: 'statusMemory2Img',
+        previewId: 'previewMemory2Img',
+        onSuccess: url => { if (!currentData.spread2) currentData.spread2 = {}; currentData.spread2.memory2Photo = url; }
+      });
     });
 
-    // Music Upload Listener
-    document.getElementById('uploadMusicFile').addEventListener('change', async function() {
-      const file = this.files[0];
-      if (!file) return;
-      const formData = new FormData();
-      formData.append('file', file);
-      try {
-        const res = await fetch('/api/upload', { method: 'POST', body: formData });
-        const data = await res.json();
-        if (data.success) {
-          showToast('Musik berhasil diunggah!');
+    // Music upload
+    document.getElementById('uploadMusicFile').addEventListener('change', function() {
+      uploadFile({
+        file: this.files[0],
+        progressBarId: 'progressMusic', fillId: 'fillMusic', statusId: 'statusMusic',
+        previewId: null,
+        onSuccess: async url => {
           await loadMusicList();
-          document.getElementById('selectMusic').value = data.filePath;
-          document.getElementById('adminAudioPreview').src = data.filePath;
+          document.getElementById('selectMusic').value = url;
+          document.getElementById('adminAudioPreview').src = url;
+          if (!currentData.music) currentData.music = {};
+          currentData.music.src = url;
         }
-      } catch (e) {
-        alert('Gagal mengunggah musik: ' + e.message);
-      }
+      });
     });
 
-    // Save All Data
-    document.getElementById('btnSaveAll').addEventListener('click', async () => {
-      // Gather inputs
+    // ============================================================
+    // SAVE ALL
+    // ============================================================
+    async function saveAll() {
+      const btn = document.getElementById('btnSaveAll');
+      const statusEl = document.getElementById('saveStatus');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> <span>Menyimpan...</span>';
+      statusEl.textContent = 'Menyimpan ke database...';
+
+      // Gather all form values
+      const musicSrc = document.getElementById('selectMusic').value;
       currentData.music = {
-        src: document.getElementById('selectMusic').value,
+        src: musicSrc,
         title: document.getElementById('selectMusic').selectedOptions[0]?.textContent || 'Lagu Pilihan'
       };
 
+      if (!currentData.cover) currentData.cover = {};
       currentData.cover.tagline = document.getElementById('coverTagline').value;
       currentData.cover.recipientName = document.getElementById('coverRecipientName').value;
       currentData.cover.subtext = document.getElementById('coverSubtext').value;
 
+      if (!currentData.spread1) currentData.spread1 = {};
       currentData.spread1.prologueTitle = document.getElementById('prologueTitle').value;
       currentData.spread1.chapter1Title = document.getElementById('chapter1Title').value;
       currentData.spread1.prologueP1 = document.getElementById('prologueP1').value;
@@ -768,19 +1080,20 @@
       currentData.spread1.memory1Date = document.getElementById('memory1Date').value;
       currentData.spread1.memory1Text = document.getElementById('memory1Text').value;
 
+      if (!currentData.spread2) currentData.spread2 = {};
       currentData.spread2.chapter2Title = document.getElementById('chapter2Title').value;
+      if (!currentData.spread2.reasons) currentData.spread2.reasons = [{},{},{},{}];
       for (let i = 0; i < 4; i++) {
-        if (currentData.spread2.reasons[i]) {
-          currentData.spread2.reasons[i].title = document.getElementById(`reasonTitle${i}`).value;
-          currentData.spread2.reasons[i].desc = document.getElementById(`reasonDesc${i}`).value;
-        }
+        if (!currentData.spread2.reasons[i]) currentData.spread2.reasons[i] = {};
+        currentData.spread2.reasons[i].title = document.getElementById(`reasonTitle${i}`).value;
+        currentData.spread2.reasons[i].desc = document.getElementById(`reasonDesc${i}`).value;
       }
-
       currentData.spread2.chapter3Title = document.getElementById('chapter3Title').value;
       currentData.spread2.memory2Caption = document.getElementById('memory2Caption').value;
       currentData.spread2.memory2Date = document.getElementById('memory2Date').value;
       currentData.spread2.memory2Text = document.getElementById('memory2Text').value;
 
+      if (!currentData.spread3) currentData.spread3 = {};
       currentData.spread3.cakeTitle = document.getElementById('cakeTitle').value;
       currentData.spread3.wishMessage = document.getElementById('wishMessage').value;
       currentData.spread3.letterDate = document.getElementById('letterDate').value;
@@ -788,6 +1101,7 @@
       currentData.spread3.letterContent = document.getElementById('letterContent').value;
       currentData.spread3.letterSender = document.getElementById('letterSender').value;
 
+      if (!currentData.spread4) currentData.spread4 = {};
       currentData.spread4.giftSecretMessage = document.getElementById('giftSecretMessage').value;
       currentData.spread4.endingTitle = document.getElementById('endingTitle').value;
       currentData.spread4.endingQuote = document.getElementById('endingQuote').value;
@@ -795,28 +1109,41 @@
       try {
         const res = await fetch('/api/content', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
+          },
           body: JSON.stringify(currentData)
         });
         const result = await res.json();
-        if (result.success) {
-          showToast('✅ Semua perubahan berhasil disimpan!');
-        } else {
-          alert('Gagal menyimpan: ' + result.error);
-        }
-      } catch (err) {
-        alert('Error: ' + err.message);
-      }
-    });
 
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.textContent = msg;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+        if (!res.ok || !result.success) throw new Error(result.error || 'Gagal menyimpan');
+
+        showToast('✅ Semua perubahan berhasil disimpan!', 'success');
+        statusEl.textContent = '✅ Tersimpan — ' + new Date().toLocaleTimeString('id-ID');
+      } catch (err) {
+        showToast('❌ Gagal menyimpan: ' + err.message, 'error');
+        statusEl.textContent = '❌ Gagal menyimpan. Coba lagi.';
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>💾</span> <span>Simpan Semua Perubahan</span>';
+      }
     }
 
-    loadContent();
+    // ============================================================
+    // TOAST
+    // ============================================================
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => toast.className = `toast ${type}`, 3500);
+    }
+
+    // ============================================================
+    // START
+    // ============================================================
+    init();
   </script>
 </body>
 </html>

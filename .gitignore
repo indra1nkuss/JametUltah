@@ -1,3 +1,9 @@
 node_modules
 .DS_Store
 Thumbs.db
+
+# Environment variables — JANGAN commit file ini!
+.env
+
+# Upload cache
+assets/*.tmp
