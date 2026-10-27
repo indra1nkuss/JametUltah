@@ -2002,11 +2002,19 @@ html, body {
 
   /* Mobile Envelope & Letter */
   .letter-page .page-content {
-    padding-top: 16px !important;
+    padding-top: 14px !important;
+  }
+
+  .letter-page .serif-title {
+    margin-bottom: 2px !important;
+  }
+
+  .letter-page .ornament-divider {
+    margin: 2px 0 6px !important;
   }
 
   .envelope-container {
-    margin: 22px auto 8px !important;
+    margin: 48px auto 6px !important;
   }
 
   .vintage-envelope {
@@ -2056,7 +2064,7 @@ html, body {
 
   /* When Envelope Opens on Mobile: positioned cleanly below the title */
   .vintage-envelope.opened .letter-sheet {
-    transform: translateY(-24px) !important;
+    transform: translateY(-8px) !important;
     height: 195px !important;
     max-height: 205px !important;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
