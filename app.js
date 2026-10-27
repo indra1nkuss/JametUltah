@@ -260,10 +260,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (direction === 'next') {
         prevCard.classList.add('flip-out-next');
-        nextCard.classList.add('mobile-active', 'flip-in-next');
+        nextCard.classList.add('flip-in-next');
       } else {
         prevCard.classList.add('flip-out-prev');
-        nextCard.classList.add('mobile-active', 'flip-in-prev');
+        nextCard.classList.add('flip-in-prev');
       }
 
       // Reset scroll on target page
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         isAnimatingFlip = false;
-      }, 700);
+      }, 650);
     } else {
       mobileCards.forEach((c, idx) => {
         c.classList.toggle('mobile-active', idx === currentMobilePage);
@@ -406,6 +406,19 @@ document.addEventListener('DOMContentLoaded', () => {
     touchStartY = e.changedTouches[0].screenY;
   }, { passive: true });
 
+  stage.addEventListener('touchmove', (e) => {
+    if (!e.touches || !e.touches[0]) return;
+    const currentX = e.touches[0].screenX;
+    const currentY = e.touches[0].screenY;
+    const dx = Math.abs(currentX - touchStartX);
+    const dy = Math.abs(currentY - touchStartY);
+
+    // Lock horizontal dragging so book stays 100% solid and never shifts horizontally
+    if (dx > dy && dx > 8) {
+      if (e.cancelable) e.preventDefault();
+    }
+  }, { passive: false });
+
   stage.addEventListener('touchend', (e) => {
     const touchEndX = e.changedTouches[0].screenX;
     const touchEndY = e.changedTouches[0].screenY;
@@ -427,11 +440,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // GESER KE KANAN (diffX > 0): MEMBUKA / HALAMAN BERIKUTNYA
+      // GESER KE KANAN (diffX > 0): MEMBUKA HALAMAN BERIKUTNYA
       if (diffX > 0) {
         turnNext();
-      } else {
-        // GESER KE KIRI (diffX < 0): MENUTUP / KEMBALI KE DEPAN
+      } else if (diffX < -30) {
+        // GESER KE KIRI (diffX < -30): MENUTUP / KEMBALI KE DEPAN
         turnPrev();
       }
     }

@@ -1589,7 +1589,7 @@ html, body {
     pointer-events: auto !important;
     visibility: visible !important;
     z-index: 10 !important;
-    transform: rotateY(0deg) scale(1) translateZ(0) !important;
+    transform: rotateY(0deg) scale(1) translateZ(0);
   }
 
   /* =====================================================
@@ -1681,124 +1681,55 @@ html, body {
   }
 
   /* =====================================================
-     LUXURY 3D BOOK FLIP ANIMATION ON MOBILE (NEXT / BUKA)
+     BUKA HALAMAN BARU (NEXT / Geser ke Kanan)
      ===================================================== */
-  .mobile-book-card.flip-out-next {
-    animation: mobilePageFlipOutNext 0.7s cubic-bezier(0.3, 0.05, 0.2, 1) forwards;
-    z-index: 25 !important;
-    pointer-events: none;
-    transform-origin: left center !important;
-  }
-
   .mobile-book-card.flip-in-next {
-    animation: mobilePageFlipInNext 0.7s cubic-bezier(0.3, 0.05, 0.2, 1) forwards;
-    z-index: 20 !important;
+    animation: mobilePageFlipInNext 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    z-index: 30 !important;
     pointer-events: auto;
     transform-origin: left center !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
 
-  @keyframes mobilePageFlipOutNext {
-    0% {
-      transform: rotateY(0deg) skewY(0deg) translateZ(0);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-      filter: brightness(1);
-      opacity: 1;
-    }
-    35% {
-      transform: rotateY(-60deg) skewY(-2deg) scale(0.98) translateZ(25px);
-      box-shadow: -15px 15px 45px rgba(0, 0, 0, 0.55);
-      filter: brightness(1.05);
-      opacity: 0.98;
-    }
-    75% {
-      transform: rotateY(-130deg) skewY(-1deg) scale(0.96) translateZ(10px);
-      box-shadow: -30px 10px 40px rgba(0, 0, 0, 0.4);
-      filter: brightness(0.85);
-      opacity: 0.85;
-    }
-    100% {
-      transform: rotateY(-180deg) skewY(0deg) translateZ(0);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-      filter: brightness(0.7);
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
-  @keyframes mobilePageFlipInNext {
-    0% {
-      transform: scale(0.94) translateZ(-30px);
-      box-shadow: inset 20px 0 30px rgba(0, 0, 0, 0.4);
-      filter: brightness(0.7);
-      opacity: 0.5;
-    }
-    50% {
-      transform: scale(0.97) translateZ(-15px);
-      box-shadow: inset 10px 0 20px rgba(0, 0, 0, 0.25);
-      filter: brightness(0.88);
-      opacity: 0.9;
-    }
-    100% {
-      transform: scale(1) translateZ(0);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-      filter: brightness(1);
-      opacity: 1;
-      visibility: visible;
-    }
-  }
-
-  /* =====================================================
-     LUXURY 3D BOOK FLIP ANIMATION ON MOBILE (PREV / TUTUP)
-     ===================================================== */
-  .mobile-book-card.flip-out-prev {
-    animation: mobilePageFlipOutPrev 0.7s cubic-bezier(0.3, 0.05, 0.2, 1) forwards;
+  .mobile-book-card.flip-out-next {
+    animation: mobilePageFlipOutNext 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     z-index: 15 !important;
     pointer-events: none;
     transform-origin: left center !important;
   }
 
-  .mobile-book-card.flip-in-prev {
-    animation: mobilePageFlipInPrev 0.7s cubic-bezier(0.3, 0.05, 0.2, 1) forwards;
-    z-index: 25 !important;
-    pointer-events: auto;
-    transform-origin: left center !important;
-  }
-
-  @keyframes mobilePageFlipInPrev {
+  /* Halaman baru terbuka ke depan dengan megah */
+  @keyframes mobilePageFlipInNext {
     0% {
-      transform: rotateY(-180deg) skewY(0deg) translateZ(0);
-      filter: brightness(0.7);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      transform: perspective(2000px) rotateY(-120deg) scale(0.94) translateZ(30px);
+      box-shadow: -25px 15px 45px rgba(0, 0, 0, 0.45);
+      filter: brightness(0.8);
       opacity: 0;
     }
-    30% {
-      transform: rotateY(-125deg) skewY(1.5deg) scale(0.96) translateZ(15px);
-      filter: brightness(0.85);
-      box-shadow: -25px 15px 45px rgba(0, 0, 0, 0.4);
-      opacity: 0.9;
-    }
-    70% {
-      transform: rotateY(-45deg) skewY(1deg) scale(0.99) translateZ(25px);
+    40% {
+      transform: perspective(2000px) rotateY(-50deg) scale(0.98) translateZ(20px);
+      box-shadow: -15px 15px 35px rgba(0, 0, 0, 0.4);
       filter: brightness(1.05);
-      box-shadow: -15px 15px 35px rgba(0, 0, 0, 0.5);
-      opacity: 1;
+      opacity: 0.95;
     }
     100% {
-      transform: rotateY(0deg) skewY(0deg) scale(1) translateZ(0);
-      filter: brightness(1);
+      transform: perspective(2000px) rotateY(0deg) scale(1) translateZ(0);
       box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+      filter: brightness(1);
       opacity: 1;
       visibility: visible;
     }
   }
 
-  @keyframes mobilePageFlipOutPrev {
+  /* Halaman lama tersingkap ke belakang */
+  @keyframes mobilePageFlipOutNext {
     0% {
       transform: scale(1) translateZ(0);
       filter: brightness(1);
       opacity: 1;
     }
-    60% {
+    50% {
       transform: scale(0.97) translateZ(-15px);
       filter: brightness(0.85);
       opacity: 0.8;
@@ -1808,6 +1739,68 @@ html, body {
       filter: brightness(0.65);
       opacity: 0;
       visibility: hidden;
+    }
+  }
+
+  /* =====================================================
+     TUTUP HALAMAN / KEMBALI (PREV / Geser ke Kiri)
+     ===================================================== */
+  .mobile-book-card.flip-out-prev {
+    animation: mobilePageFlipOutPrev 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    z-index: 30 !important;
+    pointer-events: none;
+    transform-origin: left center !important;
+  }
+
+  .mobile-book-card.flip-in-prev {
+    animation: mobilePageFlipInPrev 0.65s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    z-index: 15 !important;
+    pointer-events: auto;
+    transform-origin: left center !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* Halaman saat ini menutup kembali ke kiri */
+  @keyframes mobilePageFlipOutPrev {
+    0% {
+      transform: perspective(2000px) rotateY(0deg) scale(1) translateZ(0);
+      filter: brightness(1);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+      opacity: 1;
+    }
+    50% {
+      transform: perspective(2000px) rotateY(-60deg) scale(0.98) translateZ(20px);
+      filter: brightness(1.05);
+      box-shadow: -15px 15px 35px rgba(0, 0, 0, 0.45);
+      opacity: 0.95;
+    }
+    100% {
+      transform: perspective(2000px) rotateY(-120deg) scale(0.94) translateZ(30px);
+      filter: brightness(0.7);
+      box-shadow: -25px 15px 45px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  /* Halaman sebelumnya di bawahnya kembali muncul */
+  @keyframes mobilePageFlipInPrev {
+    0% {
+      transform: scale(0.94) translateZ(-30px);
+      filter: brightness(0.65);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(0.97) translateZ(-15px);
+      filter: brightness(0.85);
+      opacity: 0.85;
+    }
+    100% {
+      transform: scale(1) translateZ(0);
+      filter: brightness(1);
+      opacity: 1;
+      visibility: visible;
     }
   }
 
@@ -2008,15 +2001,23 @@ html, body {
   }
 
   /* Mobile Envelope & Letter */
+  .letter-page .page-content {
+    padding-top: 16px !important;
+  }
+
+  .envelope-container {
+    margin: 22px auto 8px !important;
+  }
+
   .vintage-envelope {
-    width: 220px;
+    width: 225px;
     height: 140px;
   }
 
   .envelope-flap {
-    border-left-width: 110px;
-    border-right-width: 110px;
-    border-top-width: 75px;
+    border-left-width: 112px;
+    border-right-width: 112px;
+    border-top-width: 76px;
   }
 
   .wax-seal {
@@ -2030,7 +2031,7 @@ html, body {
     left: 8px;
     width: calc(100% - 16px);
     height: 125px;
-    padding: 8px 10px;
+    padding: 10px 12px;
   }
 
   .letter-top {
@@ -2053,14 +2054,19 @@ html, body {
     font-size: 1rem;
   }
 
+  /* When Envelope Opens on Mobile: positioned cleanly below the title */
   .vintage-envelope.opened .letter-sheet {
-    transform: translateY(-55px);
-    height: 185px;
+    transform: translateY(-24px) !important;
+    height: 195px !important;
+    max-height: 205px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35) !important;
+    border: 1px solid rgba(212, 175, 55, 0.4) !important;
+    overflow-y: auto !important;
   }
 
   .envelope-help {
     font-size: 0.74rem;
-    margin-top: 10px;
+    margin-top: 12px !important;
   }
 
   /* Mobile Gift Box */
